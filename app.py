@@ -497,6 +497,67 @@ elif pagina == "ℹ️ Nosotros":
         st.markdown(f"<p style='font-size:1.05em; color:{theme['text_primary']};'>Ser el socio estratégico preferido de empresas ecuatorianas.</p>", unsafe_allow_html=True)
     with tab4:
         st.markdown(f"<p style='font-size:1.05em; color:{theme['text_primary']}; line-height:2;'><strong>Integridad</strong> • <strong>Excelencia</strong> • <strong>Innovación</strong><br><strong>Responsabilidad</strong> • <strong>Colaboración</strong> • <strong>Sostenibilidad</strong></p>", unsafe_allow_html=True)
+    
+    st.divider()
+    st.markdown(f"<h2 class='section-title'>Nuestro Equipo</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p class='section-subtitle'>Profesionales comprometidos con tu éxito</p>", unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns(3, gap="large")
+    
+    equipo = [
+        {
+            "archivo": "fotos/gerente.jpg",
+            "titulo": "Liderazgo Ejecutivo",
+            "desc": "Nuestros gerentes aportan visión estratégica y experiencia comprobada. Con más de 15 años en consultoría, dirigen cada proyecto con excelencia y compromiso hacia resultados transformadores para tu empresa."
+        },
+        {
+            "archivo": "fotos/ingenieros.jpg",
+            "titulo": "Ingeniería de Soluciones",
+            "desc": "Ingenieros especializados que diseñan y ejecutan soluciones complejas. Combinan metodologías avanzadas con innovación tecnológica para resolver los desafíos más exigentes de tu negocio."
+        },
+        {
+            "archivo": "fotos/consultoras.jpg",
+            "titulo": "Consultoría Especializada",
+            "desc": "Consultores con expertise en diversos sectores económicos. Aportan perspectivas frescas y estrategias probadas que aceleran la transformación y crecimiento de tu organización."
+        }
+    ]
+    
+    cols = [col1, col2, col3]
+    
+    for idx, (col, person) in enumerate(zip(cols, equipo)):
+        with col:
+            try:
+                with open(person["archivo"], "rb") as f:
+                    img_data = base64.b64encode(f.read()).decode()
+                    st.markdown(f"""
+                        <div style="
+                            background: {theme['bg_secondary']};
+                            border-radius: 16px;
+                            overflow: hidden;
+                            border: 2px solid {theme['accent_1']};
+                            transition: all 0.3s ease;
+                        ">
+                            <img src="data:image/jpeg;base64,{img_data}" style="width:100%; height:300px; object-fit:cover;">
+                            <div style="padding: 25px;">
+                                <h3 style="color: {theme['accent_1']}; margin-top: 0; font-size: 1.2em;">{person['titulo']}</h3>
+                                <p style="color: {theme['text_secondary']}; line-height: 1.6; margin: 0; font-size: 0.95em;">{person['desc']}</p>
+                            </div>
+                        </div>
+                    """, unsafe_allow_html=True)
+            except:
+                st.markdown(f"""
+                    <div style="
+                        background: {theme['bg_secondary']};
+                        border-radius: 16px;
+                        padding: 40px;
+                        border: 2px solid {theme['accent_1']};
+                        text-align: center;
+                    ">
+                        <p style="color: {theme['text_secondary']};">📷 Imagen no encontrada</p>
+                        <h3 style="color: {theme['accent_1']}; margin-top: 15px;">{person['titulo']}</h3>
+                        <p style="color: {theme['text_secondary']}; font-size: 0.9em;">{person['desc']}</p>
+                    </div>
+                """, unsafe_allow_html=True)
 
 elif pagina == "💼 Servicios":
     st.image("https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80", use_container_width=True)
