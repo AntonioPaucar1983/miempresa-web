@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import datetime
 import plotly.graph_objects as go
 import plotly.express as px
+import base64
 
 # Configuración de la página
 st.set_page_config(
@@ -11,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Estilos CSS personalizados con tema celeste
+# Estilos CSS personalizados con tema celeste - MEJORADO
 st.markdown("""
     <style>
         /* Responsive Design */
@@ -22,8 +23,11 @@ st.markdown("""
             .header-section h1 {
                 font-size: 1.8em !important;
             }
-            .metric-card {
-                padding: 20px 10px !important;
+            .propósito-section h2 {
+                font-size: 1.8em !important;
+            }
+            .propósito-section h3 {
+                font-size: 1.3em !important;
             }
         }
         
@@ -50,15 +54,46 @@ st.markdown("""
         .header-section h1 {
             margin: 0;
             font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .propósito-section {
+            background: linear-gradient(135deg, #0d3b66 0%, #0099ff 100%);
+            padding: 60px 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 40px 0;
+            box-shadow: 0 8px 20px rgba(0, 153, 255, 0.2);
+        }
+        
+        .propósito-section h2 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .propósito-section h3 {
+            color: #00ccff;
+            font-size: 1.8em;
+            line-height: 1.6;
+            margin: 0;
+            font-weight: bold;
         }
         
         .service-card {
             background-color: white;
-            border-left: 5px solid #0099ff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 153, 255, 0.1);
+            border-left: 6px solid #0099ff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 153, 255, 0.15);
             margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .service-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 153, 255, 0.3);
+            transform: translateY(-5px);
         }
         
         .news-card {
@@ -67,6 +102,12 @@ st.markdown("""
             border-radius: 8px;
             border: 2px solid #0099ff;
             margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .news-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 153, 255, 0.2);
+            transform: translateY(-2px);
         }
         
         .contact-form {
@@ -83,6 +124,11 @@ st.markdown("""
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0, 153, 255, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: scale(1.05);
         }
         
         .metric-value {
@@ -103,6 +149,39 @@ st.markdown("""
             margin-top: 10px;
         }
         
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #0099ff 0%, #00ccff 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 153, 255, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 153, 255, 0.4);
+        }
+        
+        .section-title {
+            color: #0099ff;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .section-subtitle {
+            color: #666;
+            font-size: 1.1em;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
         /* Imágenes responsive */
         img {
             max-width: 100%;
@@ -116,7 +195,7 @@ st.markdown("""
 with st.sidebar:
     st.markdown("""
         <div style="text-align: center; padding: 20px 0;">
-            <h2 style="color: #0099ff;">🏢 Consultores Enterprise. S. A.</h2>
+            <h2 style="color: #0099ff;">🏢 Consultores Enterprise</h2>
             <p style="color: #666; font-size: 0.9em;">Consultoría Gerencial y Administración de Proyectos</p>
         </div>
     """, unsafe_allow_html=True)
@@ -135,12 +214,15 @@ if pagina == "🏠 Inicio":
     
     st.markdown("""
         <div class="header-section" style="text-align: center; margin-bottom: 20px;">
-            <h2>Bienvenido a Consultores Enterprise. S. A.</h2>
+            <h1>Consultores Enterprise. S. A.</h1>
             <p style="font-size: 1.1em;">Consultoría Gerencial y Administración de Proyectos</p>
         </div>
     """, unsafe_allow_html=True)
     
-    # Convertir imágenes a base64
+    # Carrusel automático de imágenes
+    if 'imagen_index' not in st.session_state:
+        st.session_state.imagen_index = 0
+    
     fotos = [
         "fotos/fotoInicio.jpg",
         "fotos/fotoInicio1.jpg",
@@ -149,7 +231,6 @@ if pagina == "🏠 Inicio":
         "fotos/fotoInicio4.jpg"
     ]
     
-    # Crear carrusel con las imágenes
     carousel_html = """
     <style>
         .carousel {
@@ -210,7 +291,6 @@ if pagina == "🏠 Inicio":
         <div class="carousel-inner">
     """
     
-    # Agregar cada imagen
     for foto in fotos:
         try:
             with open(foto, "rb") as img_file:
@@ -229,22 +309,25 @@ if pagina == "🏠 Inicio":
     
     st.divider()
     
+    # SECCIÓN: PROPÓSITO/MISIÓN
     st.markdown("""
-        <div class="header-section">
-            <h1>Consultores Enterprise. S. A. Cía. Ltda.</h1>
-            <p style="font-size: 1.2em; margin-top: 10px;">Consultoría Gerencial y Administración de Proyectos</p>
-            <p style="font-size: 1em; opacity: 0.95;">Transformando negocios ecuatorianos con soluciones estratégicas</p>
+        <div class="propósito-section">
+            <h2>NUESTRO PROPÓSITO</h2>
+            <h3>"ASESORAMOS TUS SUEÑOS<br>
+                IMPULSAMOS TUS PROYECTOS<br>
+                TRANSFORMAMOS TU EMPRESA"</h3>
         </div>
     """, unsafe_allow_html=True)
     
-    # Dashboard de Métricas Profesional con Gráficos
+    st.divider()
+    
+    # Dashboard de Métricas
     st.markdown("""
-        <div class="header-section" style="text-align: center; margin-bottom: 30px;">
-            <h2>Nuestro Desempeño 2024</h2>
+        <div style="text-align: center; margin: 50px 0;">
+            <h2 class="section-title">Nuestro Desempeño 2024</h2>
         </div>
     """, unsafe_allow_html=True)
     
-    # Fila 1: Métricas principales
     col1, col2, col3 = st.columns(3, gap="large")
     
     with col1:
@@ -276,18 +359,17 @@ if pagina == "🏠 Inicio":
     
     st.divider()
     
-    # Fila 2: Gráficos
+    # Gráficos
     col1, col2 = st.columns(2, gap="large")
     
     with col1:
-        # Gráfico de Proyectos por Año
         fig_proyectos = go.Figure(data=[
             go.Bar(x=['2020', '2021', '2022', '2023', '2024'], 
                    y=[8, 12, 15, 18, 45],
                    marker=dict(color=['#0099ff', '#00ccff', '#0099ff', '#00ccff', '#0099ff']))
         ])
         fig_proyectos.update_layout(
-            title="Proyectos por Año",
+            title="Proyectos Completados por Año",
             xaxis_title="Año",
             yaxis_title="Cantidad",
             hovermode='x unified',
@@ -298,7 +380,6 @@ if pagina == "🏠 Inicio":
         st.plotly_chart(fig_proyectos, use_container_width=True)
     
     with col2:
-        # Gráfico Pie: Sectores
         sectores = ['Manufactura', 'Servicios', 'Educación', 'Público', 'Comercio']
         valores = [8, 10, 6, 5, 3]
         
@@ -311,11 +392,9 @@ if pagina == "🏠 Inicio":
         )
         st.plotly_chart(fig_sectores, use_container_width=True)
     
-    # Fila 3: Más gráficos
     col1, col2 = st.columns(2, gap="large")
     
     with col1:
-        # Gráfico de Línea: Satisfacción
         meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
         satisfaccion = [88, 90, 89, 92, 93, 91, 94, 95, 93, 96, 97, 98]
         
@@ -334,12 +413,11 @@ if pagina == "🏠 Inicio":
         st.plotly_chart(fig_satisfaccion, use_container_width=True)
     
     with col2:
-        # Gráfico Donut: Distribución de Servicios
-        servicios = ['Diagnóstico', 'Planificación', 'Optimización', 'Capacitación', 'Gestión Cambio']
+        servicios_list = ['Diagnóstico', 'Planificación', 'Optimización', 'Capacitación', 'Gestión Cambio']
         distribucion = [20, 25, 20, 18, 17]
         
         fig_servicios = go.Figure(data=[go.Pie(
-            labels=servicios, 
+            labels=servicios_list, 
             values=distribucion,
             hole=.4,
             marker=dict(colors=['#0099ff', '#00ccff', '#005fa3', '#0077cc', '#00d4ff'])
@@ -352,45 +430,21 @@ if pagina == "🏠 Inicio":
     
     st.divider()
     
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("💡 Nuestra Propuesta")
-        st.write("""
-        En Consultores Enterprise. S. A. creemos que cada empresa es única. Ofrecemos soluciones 
-        personalizadas de consultoría gerencial que se adaptan a tus necesidades específicas.
-        
-        Nuestro enfoque combina experiencia, innovación y conocimiento del mercado ecuatoriano 
-        para ayudarte a alcanzar tus objetivos estratégicos.
-        """)
-    
-    with col2:
-        st.subheader("🎯 ¿Por qué elegirnos?")
-        st.write("""
-        ✅ Equipo especializado en consultoría gerencial
-        
-        ✅ Metodologías probadas internacionalmente
-        
-        ✅ Experiencia con empresas ecuatorianas
-        
-        ✅ Resultados medibles y sostenibles
-        
-        ✅ Atención personalizada
-        """)
-    
-    st.divider()
-    
-    st.subheader("📞 ¿Listo para transformar tu negocio?")
-    st.info("Contáctanos para una consulta inicial sin costo. Estamos listos para ayudarte.")
+    # CTA destacado
+    st.markdown("""
+        <div style="text-align: center; padding: 40px; background-color: #e8f4f8; border-radius: 10px; margin: 30px 0;">
+            <h3 style="color: #0099ff; margin-top: 0;">¿Listo para transformar tu empresa?</h3>
+            <p style="color: #555; font-size: 1.1em;">Descubre cómo nuestras soluciones pueden impulsar el crecimiento de tu negocio</p>
+        </div>
+    """, unsafe_allow_html=True)
 
 # ==================== PÁGINA: NOSOTROS ====================
 elif pagina == "ℹ️ Nosotros":
-    # Imagen responsive
     st.image("https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80", use_container_width=True)
     
     st.markdown("""
         <div class="header-section">
-            <h1>Sobre Nosotros</h1>
+            <h1>Sobre Consultores Enterprise. S. A.</h1>
         </div>
     """, unsafe_allow_html=True)
     
@@ -399,7 +453,7 @@ elif pagina == "ℹ️ Nosotros":
     with tab1:
         st.subheader("📖 Nuestra Historia")
         st.write("""
-        Consultores Enterprise. S. A. fue fundada en 2012 por un grupo de profesionales con más de 15 años 
+        Consultores Enterprise fue fundada en 2012 por un grupo de profesionales con más de 15 años 
         de experiencia en consultoría gerencial en Latinoamérica. 
         
         Inicialmente comenzamos como una pequeña consultora en Quito, enfocados en empresas 
@@ -464,63 +518,68 @@ elif pagina == "💼 Servicios":
     st.image("https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80", use_container_width=True)
     
     st.markdown("""
-        <div class="header-section">
-            <h1>Nuestros Servicios</h1>
+        <div style="text-align: center; margin: 50px 0;">
+            <h2 class="section-title">Nuestros Servicios</h2>
+            <p class="section-subtitle">Soluciones integrales diseñadas para tu éxito</p>
         </div>
     """, unsafe_allow_html=True)
     
     st.write("""
-    En Consultores Enterprise. S. A. ofrecemos un portafolio completo de servicios de consultoría 
-    diseñados para satisfacer las necesidades más complejas de tu empresa.
+    Ofrecemos un portafolio completo de servicios de consultoría estratégica, diseñados para 
+    transformar tu negocio y llevar tu empresa al siguiente nivel.
     """)
     
     st.divider()
     
     servicios = [
         {
-            "titulo": "Diagnóstico Empresarial",
+            "titulo": "🔍 Diagnóstico Empresarial",
             "descripcion": "Evaluación integral de tu empresa para identificar fortalezas, debilidades, oportunidades y amenazas.",
-            "icon": "🔍"
+            "color": "#0099ff"
         },
         {
-            "titulo": "Administración de Proyectos",
+            "titulo": "📋 Administración de Proyectos",
             "descripcion": "Gestión profesional de proyectos con metodologías PMI/PMBOK. Planificación, ejecución y cierre exitoso.",
-            "icon": "📋"
+            "color": "#00ccff"
         },
         {
-            "titulo": "Planificación Estratégica",
+            "titulo": "🎯 Planificación Estratégica",
             "descripcion": "Desarrollo de estrategias claras y alcanzables para el crecimiento y consolidación de tu negocio.",
-            "icon": "🎯"
+            "color": "#0077cc"
         },
         {
-            "titulo": "Optimización de Procesos",
+            "titulo": "⚙️ Optimización de Procesos",
             "descripcion": "Análisis y mejora continua de tus procesos operacionales para aumentar eficiencia y reducir costos.",
-            "icon": "⚙️"
+            "color": "#005fa3"
         },
         {
-            "titulo": "Gestión del Cambio",
+            "titulo": "🔄 Gestión del Cambio",
             "descripcion": "Acompañamiento en procesos de transformación organizacional y cambio cultural.",
-            "icon": "🔄"
+            "color": "#0099ff"
         },
         {
-            "titulo": "Capacitación Ejecutiva",
+            "titulo": "📚 Capacitación Ejecutiva",
             "descripcion": "Programas de formación personalizados para líderes y equipos gerenciales.",
-            "icon": "📚"
+            "color": "#00ccff"
         }
     ]
     
     for servicio in servicios:
         st.markdown(f"""
-            <div class="service-card">
-                <h3>{servicio['icon']} {servicio['titulo']}</h3>
-                <p>{servicio['descripcion']}</p>
+            <div class="service-card" style="border-left-color: {servicio['color']};">
+                <h3 style="color: {servicio['color']}; margin-top: 0;">{servicio['titulo']}</h3>
+                <p style="color: #555; line-height: 1.6;">{servicio['descripcion']}</p>
             </div>
         """, unsafe_allow_html=True)
     
     st.divider()
     
-    st.subheader("🤔 ¿Cuál es tu necesidad?")
-    st.write("Si tienes una necesidad específica no listada, contáctanos. Diseñamos soluciones personalizadas.")
+    st.markdown("""
+        <div style="text-align: center; padding: 40px; background-color: #e8f4f8; border-radius: 10px; margin: 30px 0;">
+            <h3 style="color: #0099ff; margin-top: 0;">¿Necesitas un servicio personalizado?</h3>
+            <p style="color: #555;">Contáctanos para discutir tus necesidades específicas y diseñar una solución a medida</p>
+        </div>
+    """, unsafe_allow_html=True)
 
 # ==================== PÁGINA: NOTICIAS ====================
 elif pagina == "📰 Noticias":
@@ -537,7 +596,7 @@ elif pagina == "📰 Noticias":
             "titulo": "5 Tendencias de Administración de Proyectos en 2024",
             "fecha": "15 de septiembre, 2024",
             "contenido": "La administración de proyectos evoluciona constantemente. En este artículo exploramos las tendencias más importantes que están transformando la forma en que gestionamos proyectos en Ecuador.",
-            "autor": "Equipo Consultores Enterprise. S. A."
+            "autor": "Equipo Consultores Enterprise"
         },
         {
             "titulo": "Transformación Digital: Más que una moda",
@@ -555,7 +614,7 @@ elif pagina == "📰 Noticias":
             "titulo": "Liderazgo Efectivo en Tiempos de Incertidumbre",
             "fecha": "25 de agosto, 2024",
             "contenido": "¿Cómo los líderes pueden mantener equipos motivados en épocas de cambio? Compartimos estrategias probadas que funcionan en el contexto ecuatoriano.",
-            "autor": "Equipo Consultores Enterprise. S. A."
+            "autor": "Equipo Consultores Enterprise"
         }
     ]
     
@@ -585,7 +644,7 @@ elif pagina == "📧 Contacto":
         st.subheader("📍 Información de Contacto")
         
         st.write("""
-        **Consultores Enterprise. S. A. Cía. Ltda.**
+        **Consultores Enterprise. S. A.**
         
         📍 **Oficina Principal**
         Av. Amazonas N34-451 y Av. Naciones Unidas
@@ -596,11 +655,11 @@ elif pagina == "📧 Contacto":
         +593 2 XXXX-XXXX
         
         ✉️ **Correo Electrónico:**
-        info@miempresaacme.ec
-        contacto@miempresaacme.ec
+        info@consultor-enterprise.ec
+        contacto@consultor-enterprise.ec
         
         🌐 **Web:**
-        www.miempresaacme.ec
+        www.consultor-enterprise.ec
         
         ⏰ **Horarios de Atención:**
         Lunes - Viernes: 8:00 AM - 6:00 PM
@@ -675,7 +734,7 @@ elif pagina == "📧 Contacto":
 st.divider()
 st.markdown("""
     <div style="text-align: center; padding: 20px; color: #666; font-size: 0.9em;">
-        <p>© 2024 Consultores Enterprise. S. A. Cía. Ltda. | Consultoría Gerencial y Administración de Proyectos</p>
+        <p>© 2024 Consultores Enterprise. S. A. | Consultoría Gerencial y Administración de Proyectos</p>
         <p>Quito - Guayaquil - Cuenca | Ecuador</p>
         <p style="font-size: 0.8em; margin-top: 10px;">Diseño y desarrollo web realizado con Streamlit</p>
     </div>
