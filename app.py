@@ -587,7 +587,7 @@ elif pagina == "💼 Servicios":
     st.divider()
     
     servicios = [
-        {"titulo": "🔍 Diagnóstico Empresarial", "color": theme['accent_1'], "desc": "Evaluación integral para identificar oportunidades", "foto": "https://images.unsplash.com/photo-1460925895917-adf4e38df61e?w=300&q=80"},
+        {"titulo": "🔍 Diagnóstico Empresarial", "color": theme['accent_1'], "desc": "Evaluación integral para identificar oportunidades", "foto": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&q=80"},
         {"titulo": "📋 Administración de Proyectos", "color": theme['accent_2'], "desc": "Gestión profesional con metodologías PMI/PMBOK", "foto": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&q=80"},
         {"titulo": "🎯 Planificación Estratégica", "color": theme['accent_3'], "desc": "Estrategias claras para crecimiento sostenible", "foto": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&q=80"},
         {"titulo": "⚙️ Optimización de Procesos", "color": theme['accent_4'], "desc": "Mejora continua para eficiencia y reducción de costos", "foto": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=300&q=80"},
