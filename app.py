@@ -131,16 +131,21 @@ with st.sidebar:
 
 # ==================== PÁGINA: INICIO ====================
 if pagina == "🏠 Inicio":
-    # Carrusel de imágenes
+    import time
+    
+    # Carrusel automático de imágenes
     st.markdown("""
         <div class="header-section" style="text-align: center; margin-bottom: 20px;">
             <h2>Bienvenido a miEmpresaACME</h2>
+            <p style="font-size: 1.1em;">Consultoría Gerencial y Administración de Proyectos</p>
         </div>
     """, unsafe_allow_html=True)
     
-    # Carrusel de imágenes
+    # Inicializar estado del carrusel
     if 'imagen_index' not in st.session_state:
         st.session_state.imagen_index = 0
+    if 'ultimo_tiempo' not in st.session_state:
+        st.session_state.ultimo_tiempo = time.time()
     
     fotos = [
         "fotos/fotoInicio.jpg",
@@ -153,25 +158,19 @@ if pagina == "🏠 Inicio":
     # Mostrar imagen actual
     st.image(fotos[st.session_state.imagen_index], use_container_width=True)
     
-    # Controles del carrusel
-    col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1, 1])
+    # Contador visual
+    st.markdown(f"""
+        <div style="text-align: center; padding: 15px; background-color: #0099ff; color: white; border-radius: 8px; margin-top: 10px;">
+            <strong>Galería: {st.session_state.imagen_index + 1} / {len(fotos)}</strong>
+        </div>
+    """, unsafe_allow_html=True)
     
-    with col1:
-        if st.button("⬅️ Anterior"):
-            st.session_state.imagen_index = (st.session_state.imagen_index - 1) % len(fotos)
-            st.rerun()
-    
-    with col3:
-        st.markdown(f"""
-            <div style="text-align: center; padding: 10px; background-color: #0099ff; color: white; border-radius: 5px;">
-                <strong>{st.session_state.imagen_index + 1} / {len(fotos)}</strong>
-            </div>
-        """, unsafe_allow_html=True)
-    
-    with col5:
-        if st.button("Siguiente ➡️"):
-            st.session_state.imagen_index = (st.session_state.imagen_index + 1) % len(fotos)
-            st.rerun()
+    # Auto-avanzar cada 4 segundos
+    tiempo_actual = time.time()
+    if tiempo_actual - st.session_state.ultimo_tiempo > 4:
+        st.session_state.imagen_index = (st.session_state.imagen_index + 1) % len(fotos)
+        st.session_state.ultimo_tiempo = tiempo_actual
+        st.rerun()
     
     st.divider()
     
