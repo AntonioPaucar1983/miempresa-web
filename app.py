@@ -84,8 +84,10 @@ with st.sidebar:
 
 # ==================== PÁGINA: INICIO ====================
 if pagina == "🏠 Inicio":
-    # Banner con imagen local
-    st.image("fotos/fotoInicio.jpg", use_container_width=True)
+    # Banner con imagen redimensionada
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.image("fotos/fotoInicio.jpg", width=400)
     
     st.markdown("""
         <div class="header-section">
