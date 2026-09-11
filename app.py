@@ -506,13 +506,13 @@ elif pagina == "ℹ️ Nosotros":
     
     equipo = [
         {
-            "archivo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80",
+            "archivo": "https://images.unsplash.com/photo-1560264357-8d9766d45b4f?w=500&q=80",
             "titulo": "Liderazgo Ejecutivo",
             "desc": "Nuestros gerentes aportan visión estratégica y experiencia comprobada. Con más de 15 años en consultoría, dirigen cada proyecto con excelencia y compromiso hacia resultados transformadores para tu empresa.",
             "tipo": "url"
         },
         {
-            "archivo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&q=80",
+            "archivo": "https://images.unsplash.com/photo-1581092162562-40038f81b11c?w=500&q=80",
             "titulo": "Ingeniería de Soluciones",
             "desc": "Ingenieros especializados que diseñan y ejecutan soluciones complejas. Combinan metodologías avanzadas con innovación tecnológica para resolver los desafíos más exigentes de tu negocio.",
             "tipo": "url"
