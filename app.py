@@ -977,283 +977,168 @@ elif pagina == "📧 Contacto":
 
 st.divider()
 
-# CHATBOT DE IA FLOTANTE
-st.markdown(f"""
-    <style>
-        .chat-button-container {{
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 100;
-        }}
+# CHATBOT DE IA FLOTANTE - VERSIÓN SIMPLIFICADA
+chat_html = f"""
+<div style="position: fixed; bottom: 30px; right: 30px; z-index: 100; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+    <button id="chatBtn" style="
+        background: linear-gradient(135deg, {theme['accent_1']} 0%, {theme['accent_2']} 100%);
+        color: white;
+        border: none;
+        padding: 14px 24px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+    " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 45px rgba(0, 0, 0, 0.4)'" 
+    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 35px rgba(0, 0, 0, 0.3)'">
+        💬 Chat Bot
+    </button>
+    
+    <div id="chatWindow" style="
+        display: none;
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 400px;
+        height: 580px;
+        background: {theme['bg_secondary']};
+        border: 2px solid {theme['accent_1']};
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        flex-direction: column;
+        z-index: 99;
+    ">
+        <div style="background: linear-gradient(135deg, {theme['accent_1']} 0%, {theme['accent_2']} 100%); color: white; padding: 20px; border-radius: 18px 18px 0 0; display: flex; justify-content: space-between; align-items: center; font-weight: 700;">
+            <span>🤖 Asistente IA</span>
+            <button id="closeBtn" style="background: rgba(255, 255, 255, 0.2); color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 20px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 255, 255, 0.4)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">✕</button>
+        </div>
         
-        .chat-button {{
-            background: linear-gradient(135deg, {theme['accent_1']} 0%, {theme['accent_2']} 100%);
-            color: white;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
-            animation: slideInUp 0.6s ease-out;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }}
+        <div id="chatMessages" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px;"></div>
         
-        .chat-button:hover {{
-            transform: translateY(-3px);
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
-        }}
-        
-        .chat-button:active {{
-            transform: translateY(-1px);
-        }}
-        
-        .chat-container {{
-            position: fixed;
-            bottom: 100px;
-            right: 30px;
-            width: 400px;
-            height: 580px;
-            background: {theme['bg_secondary']};
-            border: 2px solid {theme['accent_1']};
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            z-index: 99;
-            animation: slideInUp 0.4s ease-out;
-        }}
-        
-        .chat-header {{
-            background: linear-gradient(135deg, {theme['accent_1']} 0%, {theme['accent_2']} 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 18px 18px 0 0;
-            text-align: center;
-            font-weight: 700;
-            font-size: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }}
-        
-        .close-btn {{
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 20px;
-            transition: all 0.3s ease;
-        }}
-        
-        .close-btn:hover {{
-            background: rgba(255, 255, 255, 0.4);
-        }}
-        
-        .chat-messages {{
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }}
-        
-        .chat-message {{
-            display: flex;
-            gap: 10px;
-            animation: slideInUp 0.3s ease-out;
-        }}
-        
-        .chat-message.user {{
-            justify-content: flex-end;
-        }}
-        
-        .chat-bubble {{
-            max-width: 75%;
-            padding: 12px 16px;
-            border-radius: 12px;
-            font-size: 0.9em;
-            line-height: 1.4;
-            word-wrap: break-word;
-        }}
-        
-        .chat-message.assistant .chat-bubble {{
-            background: {theme['bg_primary']};
-            color: {theme['text_primary']};
-            border-left: 3px solid {theme['accent_2']};
-        }}
-        
-        .chat-message.user .chat-bubble {{
-            background: linear-gradient(135deg, {theme['accent_1']}, {theme['accent_2']});
-            color: white;
-            border-radius: 12px 0 12px 12px;
-        }}
-        
-        .chat-input-area {{
-            padding: 15px;
-            border-top: 1px solid rgba({theme['accent_1']}, 0.2);
-            display: flex;
-            gap: 10px;
-        }}
-        
-        .chat-input {{
-            flex: 1;
-            padding: 10px 15px;
-            border: 1px solid {theme['accent_1']};
-            border-radius: 8px;
-            background: {theme['bg_primary']};
-            color: {theme['text_primary']};
-            font-size: 0.9em;
-            font-family: inherit;
-        }}
-        
-        .chat-input:focus {{
-            outline: none;
-            border-color: {theme['accent_2']};
-            box-shadow: 0 0 10px rgba({theme['accent_2']}, 0.3);
-        }}
-        
-        .chat-send {{
-            background: linear-gradient(135deg, {theme['accent_1']}, {theme['accent_2']});
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }}
-        
-        .chat-send:hover {{
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba({theme['accent_1']}, 0.3);
-        }}
-        
-        @media (max-width: 500px) {{
-            .chat-container {{
-                width: calc(100vw - 20px);
-                height: 400px;
-                bottom: 100px;
-                right: 10px;
-            }}
-            
-            .chat-button {{
-                padding: 12px 20px;
-                font-size: 14px;
-            }}
-        }}
-    </style>
-""", unsafe_allow_html=True)
-
-# Sistema de chat con JavaScript para manejar el modal
-st.markdown(f"""
-    <div class="chat-button-container">
-        <button class="chat-button" onclick="document.getElementById('chatModal').style.display = document.getElementById('chatModal').style.display === 'flex' ? 'none' : 'flex'">
-            💬 Chat Bot
-        </button>
-        
-        <div id="chatModal" style="display: none; position: fixed; bottom: 100px; right: 30px; width: 400px; height: 580px; background: {theme['bg_secondary']}; border: 2px solid {theme['accent_1']}; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); flex-direction: column; z-index: 99; animation: slideInUp 0.4s ease-out;">
-            <div class="chat-header">
-                🤖 Asistente IA
-                <button class="close-btn" onclick="document.getElementById('chatModal').style.display='none'">✕</button>
-            </div>
-            
-            <div class="chat-messages" id="chatMessages"></div>
-            
-            <div class="chat-input-area">
-                <input type="text" class="chat-input" id="userInput" placeholder="Escribe tu pregunta..." onkeypress="if(event.key==='Enter') sendMessage()">
-                <button class="chat-send" onclick="sendMessage()">Enviar</button>
-            </div>
+        <div style="padding: 15px; border-top: 1px solid rgba({theme['accent_1']}, 0.2); display: flex; gap: 10px;">
+            <input type="text" id="userInput" placeholder="Escribe tu pregunta..." style="
+                flex: 1;
+                padding: 10px 15px;
+                border: 1px solid {theme['accent_1']};
+                border-radius: 8px;
+                background: {theme['bg_primary']};
+                color: {theme['text_primary']};
+                font-size: 0.9em;
+                font-family: inherit;
+            " onkeypress="if(event.key==='Enter') window.sendChatMessage()">
+            <button id="sendBtn" style="
+                background: linear-gradient(135deg, {theme['accent_1']}, {theme['accent_2']});
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                Enviar
+            </button>
         </div>
     </div>
+</div>
+
+<script>
+window.chatMessages = [
+    {{role: 'assistant', content: '¡Hola! 👋 Soy el asistente de Consultores Enterprise. ¿En qué puedo ayudarte hoy? Puedo responder sobre nuestros servicios, proyectos o agendar una consulta.'}}
+];
+
+window.respuestas = {{
+    'diagnóstico': 'Nuestro Diagnóstico Empresarial es una evaluación integral de tu negocio. Identificamos fortalezas, debilidades, oportunidades y amenazas. ¿Te gustaría más información?',
+    'proyectos': 'Tenemos experiencia en administración de proyectos. Hemos completado 45+ proyectos exitosos. ¿Cuál es tu tipo de proyecto?',
+    'servicios': 'Ofrecemos 6 servicios: Diagnóstico, Proyectos, Planificación, Procesos, Cambio y Capacitación. ¿Cuál te interesa?',
+    'contacto': 'Puedes contactarnos por el formulario en Contacto, WhatsApp o nuestras oficinas en Quito, Guayaquil y Cuenca. ¿Prefieres agendar una consulta?',
+    'precio': 'Los precios varían según el proyecto. Te recomiendo agendar una llamada gratuita. ¿Te interesa?',
+    'equipo': 'Tenemos gerentes, ingenieros y consultores con 10+ años de experiencia. ¿Hay algo específico?',
+    'hola': '¡Hola! Bienvenido. Soy tu asistente. ¿Qué necesitas?',
+    'ayuda': 'Puedo ayudarte sobre servicios, metodologías, equipo o conectarte con nuestro equipo. ¿Qué deseas?'
+}};
+
+window.displayChatMessages = function() {{
+    const container = document.getElementById('chatMessages');
+    container.innerHTML = '';
     
-    <script>
-        // Respuestas del chatbot
-        const respuestas = {{
-            "diagnóstico": "Nuestro Diagnóstico Empresarial es una evaluación integral de tu negocio. Identificamos fortalezas, debilidades, oportunidades y amenazas. Perfecto para empresas que buscan mejorar su desempeño. ¿Te gustaría más información?",
-            "proyectos": "Tenemos experiencia en administración de proyectos usando metodologías PMI/PMBOK. Hemos completado 45+ proyectos exitosos con empresas de diversos sectores. ¿Cuál es tu tipo de proyecto?",
-            "servicios": "Ofrecemos 6 servicios principales: Diagnóstico Empresarial, Administración de Proyectos, Planificación Estratégica, Optimización de Procesos, Gestión del Cambio y Capacitación Ejecutiva. ¿Cuál te interesa?",
-            "contacto": "¡Excelente! Puedes contactarnos a través del formulario en la sección Contacto, o directamente por WhatsApp. También tenemos oficinas en Quito, Guayaquil y Cuenca. ¿Prefieres agendar una consulta?",
-            "precio": "Los precios varían según el alcance y complejidad del proyecto. Te recomendaría agendar una llamada gratuita para darte una cotización personalizada. ¿Te interesa?",
-            "equipo": "Contamos con un equipo multidisciplinario de gerentes, ingenieros y consultores especializados en diversos sectores. Todos con más de 10 años de experiencia. ¿Hay algo específico que quieras saber?",
-            "hola": "¡Hola! Bienvenido a Consultores Enterprise. Soy tu asistente de IA. Puedo ayudarte con información sobre nuestros servicios, proyectos, o agendar una consulta. ¿Qué necesitas?",
-            "ayuda": "Estoy aquí para ayudarte con preguntas sobre nuestros servicios, metodologías, equipo, o para conectarte con nuestro equipo comercial. ¿Qué deseas saber?",
-        }};
+    window.chatMessages.forEach(msg => {{
+        const msgDiv = document.createElement('div');
+        msgDiv.style.display = 'flex';
+        msgDiv.style.gap = '10px';
+        if (msg.role === 'user') msgDiv.style.justifyContent = 'flex-end';
         
-        // Inicializar chat
-        let messages = [
-            {{"role": "assistant", "content": "¡Hola! 👋 Soy el asistente de Consultores Enterprise. ¿En qué puedo ayudarte hoy? Puedo responder sobre nuestros servicios, proyectos o agendar una consulta."}}
-        ];
+        const bubble = document.createElement('div');
+        bubble.style.maxWidth = '75%';
+        bubble.style.padding = '12px 16px';
+        bubble.style.borderRadius = '12px';
+        bubble.style.fontSize = '0.9em';
+        bubble.style.lineHeight = '1.4';
+        bubble.style.wordWrap = 'break-word';
         
-        // Mostrar mensaje inicial
-        displayMessages();
-        
-        function sendMessage() {{
-            const input = document.getElementById('userInput');
-            const userMessage = input.value.trim();
-            
-            if (!userMessage) return;
-            
-            // Agregar mensaje del usuario
-            messages.push({{"role": "user", "content": userMessage}});
-            input.value = '';
-            
-            // Generar respuesta
-            const userLower = userMessage.toLowerCase();
-            let response = null;
-            
-            for (const [keyword, answer] of Object.entries(respuestas)) {{
-                if (userLower.includes(keyword)) {{
-                    response = answer;
-                    break;
-                }}
-            }}
-            
-            if (!response) {{
-                response = "Gracias por tu pregunta. Para obtener una respuesta más personalizada, te recomendaría contactar directamente a nuestro equipo. ¿Deseas que te ayude a agendar una consulta o tienes otra pregunta?";
-            }}
-            
-            // Agregar respuesta del asistente
-            messages.push({{"role": "assistant", "content": response}});
-            
-            // Mostrar mensajes
-            displayMessages();
-            
-            // Scroll automático
-            setTimeout(() => {{
-                document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
-            }}, 100);
+        if (msg.role === 'user') {{
+            bubble.style.background = 'linear-gradient(135deg, {theme['accent_1']}, {theme['accent_2']})';
+            bubble.style.color = 'white';
+            bubble.style.borderRadius = '12px 0 12px 12px';
+        }} else {{
+            bubble.style.background = '{theme['bg_primary']}';
+            bubble.style.color = '{theme['text_primary']}';
+            bubble.style.borderLeft = '3px solid {theme['accent_2']}';
         }}
         
-        function displayMessages() {{
-            const chatMessages = document.getElementById('chatMessages');
-            chatMessages.innerHTML = '';
-            
-            messages.forEach(msg => {{
-                const div = document.createElement('div');
-                div.className = 'chat-message ' + msg.role;
-                
-                const bubble = document.createElement('div');
-                bubble.className = 'chat-bubble';
-                bubble.textContent = msg.content;
-                
-                div.appendChild(bubble);
-                chatMessages.appendChild(div);
-            }});
-            
-            // Scroll al final
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+        bubble.textContent = msg.content;
+        msgDiv.appendChild(bubble);
+        container.appendChild(msgDiv);
+    }});
+    
+    container.scrollTop = container.scrollHeight;
+}};
+
+window.sendChatMessage = function() {{
+    const input = document.getElementById('userInput');
+    const message = input.value.trim();
+    if (!message) return;
+    
+    window.chatMessages.push({{role: 'user', content: message}});
+    input.value = '';
+    
+    let response = null;
+    const lower = message.toLowerCase();
+    
+    for (const [keyword, answer] of Object.entries(window.respuestas)) {{
+        if (lower.includes(keyword)) {{
+            response = answer;
+            break;
         }}
-    </script>
-""", unsafe_allow_html=True)
+    }}
+    
+    if (!response) {{
+        response = 'Gracias por tu pregunta. ¿Deseas agendar una consulta o tienes otra pregunta?';
+    }}
+    
+    window.chatMessages.push({{role: 'assistant', content: response}});
+    window.displayChatMessages();
+}};
+
+document.getElementById('chatBtn').onclick = function() {{
+    const win = document.getElementById('chatWindow');
+    win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
+}};
+
+document.getElementById('closeBtn').onclick = function() {{
+    document.getElementById('chatWindow').style.display = 'none';
+}};
+
+document.getElementById('sendBtn').onclick = function() {{
+    window.sendChatMessage();
+}};
+
+window.displayChatMessages();
+</script>
+"""
+
+st.markdown(chat_html, unsafe_allow_html=True)
 
 st.markdown(f'<div style="text-align:center;color:{theme["text_secondary"]};padding:20px;font-size:0.9em;">© 2024 Consultores Enterprise • Dark Mode ✓ • Versión 2.0 Moderna</div>', unsafe_allow_html=True)
