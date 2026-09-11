@@ -21,14 +21,6 @@ if 'visitas' not in st.session_state:
 if 'usuarios_online' not in st.session_state:
     st.session_state.usuarios_online = random.randint(10, 25)
 
-if 'chat_abierto' not in st.session_state:
-    st.session_state.chat_abierto = False
-
-if 'chat_messages' not in st.session_state:
-    st.session_state.chat_messages = [
-        {"role": "assistant", "content": "¡Hola! 👋 Soy el asistente de Consultores Enterprise. ¿En qué puedo ayudarte hoy? Puedo responder sobre nuestros servicios, proyectos o agendar una consulta."}
-    ]
-
 # Incrementar visitas
 st.session_state.visitas += 1
 # Variar usuarios en línea
@@ -988,37 +980,45 @@ st.divider()
 # CHATBOT DE IA FLOTANTE
 st.markdown(f"""
     <style>
-        .chat-button {{
+        .chat-button-container {{
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 60px;
-            height: 60px;
+            z-index: 100;
+        }}
+        
+        .chat-button {{
             background: linear-gradient(135deg, {theme['accent_1']} 0%, {theme['accent_2']} 100%);
-            border-radius: 50%;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+            animation: slideInUp 0.6s ease-out;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            cursor: pointer;
-            box-shadow: 0 10px 35px rgba({theme['accent_1']}, 0.4);
-            z-index: 100;
-            animation: pulse 2s infinite, slideInUp 0.6s ease-out;
-            transition: all 0.3s ease;
-            border: none;
+            gap: 8px;
         }}
         
         .chat-button:hover {{
-            transform: scale(1.15);
-            box-shadow: 0 15px 45px rgba({theme['accent_1']}, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
+        }}
+        
+        .chat-button:active {{
+            transform: translateY(-1px);
         }}
         
         .chat-container {{
             position: fixed;
             bottom: 100px;
             right: 30px;
-            width: 380px;
-            height: 550px;
+            width: 400px;
+            height: 580px;
             background: {theme['bg_secondary']};
             border: 2px solid {theme['accent_1']};
             border-radius: 20px;
@@ -1036,6 +1036,26 @@ st.markdown(f"""
             border-radius: 18px 18px 0 0;
             text-align: center;
             font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }}
+        
+        .close-btn {{
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }}
+        
+        .close-btn:hover {{
+            background: rgba(255, 255, 255, 0.4);
         }}
         
         .chat-messages {{
@@ -1118,85 +1138,47 @@ st.markdown(f"""
             box-shadow: 0 5px 15px rgba({theme['accent_1']}, 0.3);
         }}
         
-        .close-chat {{
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 18px;
-            transition: all 0.3s ease;
-        }}
-        
-        .close-chat:hover {{
-            background: rgba(255, 255, 255, 0.4);
-        }}
-        
         @media (max-width: 500px) {{
             .chat-container {{
                 width: calc(100vw - 20px);
                 height: 400px;
-                bottom: 90px;
+                bottom: 100px;
                 right: 10px;
+            }}
+            
+            .chat-button {{
+                padding: 12px 20px;
+                font-size: 14px;
             }}
         }}
     </style>
 """, unsafe_allow_html=True)
 
-# Botón flotante del chat
-col1, col2, col3 = st.columns([1, 1, 1])
-with col3:
-    if st.button("💬", key="chat_toggle", use_container_width=False, help="Abrir chat"):
-        st.session_state.chat_abierto = not st.session_state.chat_abierto
-        st.rerun()
-
-# Mostrar chat si está abierto
-if st.session_state.chat_abierto:
-    st.markdown(f"""
-        <div class="chat-container">
+# Sistema de chat con JavaScript para manejar el modal
+st.markdown(f"""
+    <div class="chat-button-container">
+        <button class="chat-button" onclick="document.getElementById('chatModal').style.display = document.getElementById('chatModal').style.display === 'flex' ? 'none' : 'flex'">
+            💬 Chat Bot
+        </button>
+        
+        <div id="chatModal" style="display: none; position: fixed; bottom: 100px; right: 30px; width: 400px; height: 580px; background: {theme['bg_secondary']}; border: 2px solid {theme['accent_1']}; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); flex-direction: column; z-index: 99; animation: slideInUp 0.4s ease-out;">
             <div class="chat-header">
                 🤖 Asistente IA
-                <button class="close-chat" onclick="location.reload()">✕</button>
+                <button class="close-btn" onclick="document.getElementById('chatModal').style.display='none'">✕</button>
             </div>
-            <div class="chat-messages" id="chatMessages">
-    """, unsafe_allow_html=True)
-    
-    # Mostrar mensajes del chat
-    for msg in st.session_state.chat_messages:
-        role = msg["role"]
-        content = msg["content"]
-        if role == "user":
-            st.markdown(f"""
-                <div class="chat-message user">
-                    <div class="chat-bubble">{content}</div>
-                </div>
-            """, unsafe_allow_html=True)
-        else:
-            st.markdown(f"""
-                <div class="chat-message assistant">
-                    <div class="chat-bubble">{content}</div>
-                </div>
-            """, unsafe_allow_html=True)
-    
-    st.markdown("""
+            
+            <div class="chat-messages" id="chatMessages"></div>
+            
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="userInput" placeholder="Escribe tu pregunta..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button class="chat-send" onclick="sendMessage()">Enviar</button>
             </div>
-            <div class="chat-input-area" id="chatInputArea">
-    """, unsafe_allow_html=True)
+        </div>
+    </div>
     
-    # Input del usuario
-    user_input = st.text_input("", placeholder="Escribe tu pregunta...", key="chat_input", label_visibility="collapsed")
-    
-    if user_input:
-        # Agregar mensaje del usuario
-        st.session_state.chat_messages.append({"role": "user", "content": user_input})
-        
-        # Generar respuesta con IA
-        respuestas = {
+    <script>
+        // Respuestas del chatbot
+        const respuestas = {{
             "diagnóstico": "Nuestro Diagnóstico Empresarial es una evaluación integral de tu negocio. Identificamos fortalezas, debilidades, oportunidades y amenazas. Perfecto para empresas que buscan mejorar su desempeño. ¿Te gustaría más información?",
             "proyectos": "Tenemos experiencia en administración de proyectos usando metodologías PMI/PMBOK. Hemos completado 45+ proyectos exitosos con empresas de diversos sectores. ¿Cuál es tu tipo de proyecto?",
             "servicios": "Ofrecemos 6 servicios principales: Diagnóstico Empresarial, Administración de Proyectos, Planificación Estratégica, Optimización de Procesos, Gestión del Cambio y Capacitación Ejecutiva. ¿Cuál te interesa?",
@@ -1205,26 +1187,73 @@ if st.session_state.chat_abierto:
             "equipo": "Contamos con un equipo multidisciplinario de gerentes, ingenieros y consultores especializados en diversos sectores. Todos con más de 10 años de experiencia. ¿Hay algo específico que quieras saber?",
             "hola": "¡Hola! Bienvenido a Consultores Enterprise. Soy tu asistente de IA. Puedo ayudarte con información sobre nuestros servicios, proyectos, o agendar una consulta. ¿Qué necesitas?",
             "ayuda": "Estoy aquí para ayudarte con preguntas sobre nuestros servicios, metodologías, equipo, o para conectarte con nuestro equipo comercial. ¿Qué deseas saber?",
-        }
+        }};
         
-        # Buscar respuesta relevante
-        user_lower = user_input.lower()
-        response = None
-        for keyword, answer in respuestas.items():
-            if keyword in user_lower:
-                response = answer
-                break
+        // Inicializar chat
+        let messages = [
+            {{"role": "assistant", "content": "¡Hola! 👋 Soy el asistente de Consultores Enterprise. ¿En qué puedo ayudarte hoy? Puedo responder sobre nuestros servicios, proyectos o agendar una consulta."}}
+        ];
         
-        if not response:
-            response = "Gracias por tu pregunta. Para obtener una respuesta más personalizada, te recomendaría contactar directamente a nuestro equipo. ¿Deseas que te ayude a agendar una consulta o tienes otra pregunta?"
+        // Mostrar mensaje inicial
+        displayMessages();
         
-        # Agregar respuesta del asistente
-        st.session_state.chat_messages.append({"role": "assistant", "content": response})
-        st.rerun()
-    
-    st.markdown("""
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
+        function sendMessage() {{
+            const input = document.getElementById('userInput');
+            const userMessage = input.value.trim();
+            
+            if (!userMessage) return;
+            
+            // Agregar mensaje del usuario
+            messages.push({{"role": "user", "content": userMessage}});
+            input.value = '';
+            
+            // Generar respuesta
+            const userLower = userMessage.toLowerCase();
+            let response = null;
+            
+            for (const [keyword, answer] of Object.entries(respuestas)) {{
+                if (userLower.includes(keyword)) {{
+                    response = answer;
+                    break;
+                }}
+            }}
+            
+            if (!response) {{
+                response = "Gracias por tu pregunta. Para obtener una respuesta más personalizada, te recomendaría contactar directamente a nuestro equipo. ¿Deseas que te ayude a agendar una consulta o tienes otra pregunta?";
+            }}
+            
+            // Agregar respuesta del asistente
+            messages.push({{"role": "assistant", "content": response}});
+            
+            // Mostrar mensajes
+            displayMessages();
+            
+            // Scroll automático
+            setTimeout(() => {{
+                document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+            }}, 100);
+        }}
+        
+        function displayMessages() {{
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = '';
+            
+            messages.forEach(msg => {{
+                const div = document.createElement('div');
+                div.className = 'chat-message ' + msg.role;
+                
+                const bubble = document.createElement('div');
+                bubble.className = 'chat-bubble';
+                bubble.textContent = msg.content;
+                
+                div.appendChild(bubble);
+                chatMessages.appendChild(div);
+            }});
+            
+            // Scroll al final
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }}
+    </script>
+""", unsafe_allow_html=True)
 
 st.markdown(f'<div style="text-align:center;color:{theme["text_secondary"]};padding:20px;font-size:0.9em;">© 2024 Consultores Enterprise • Dark Mode ✓ • Versión 2.0 Moderna</div>', unsafe_allow_html=True)
