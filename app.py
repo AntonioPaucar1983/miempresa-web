@@ -488,8 +488,8 @@ with st.sidebar:
             with open("fotos/logoEmpresa.jpg", "rb") as logo_file:
                 logo_data = base64.b64encode(logo_file.read()).decode()
                 st.markdown(f"""
-                    <div style="text-align: center; padding: 15px 0;">
-                        <img src="data:image/jpeg;base64,{logo_data}" style="width: 100px; height: auto; object-fit: contain; filter: {'brightness(1.2)' if st.session_state.dark_mode else 'brightness(1)'};">
+                    <div style="text-align: center; padding: 20px 0;">
+                        <img src="data:image/jpeg;base64,{logo_data}" style="width: 180px; height: auto; object-fit: contain; filter: {'brightness(1.3)' if st.session_state.dark_mode else 'brightness(1)'}; margin-bottom: 10px;">
                     </div>
                 """, unsafe_allow_html=True)
         except:
