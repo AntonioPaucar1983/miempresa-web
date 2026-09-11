@@ -159,6 +159,7 @@ if pagina == "🏠 Inicio":
             overflow: hidden;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 153, 255, 0.3);
+            max-height: 500px;
         }
         
         .carousel-inner {
@@ -169,11 +170,13 @@ if pagina == "🏠 Inicio":
         .carousel-item {
             min-width: 100%;
             flex: 0 0 100%;
+            overflow: hidden;
         }
         
         .carousel-item img {
             width: 100%;
-            height: auto;
+            height: 500px;
+            object-fit: cover;
             display: block;
         }
         
