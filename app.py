@@ -82,6 +82,9 @@ with st.sidebar:
 
 # ==================== PÁGINA: INICIO ====================
 if pagina == "🏠 Inicio":
+    # Banner con imagen
+    st.image("https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80", use_container_width=True)
+    
     st.markdown("""
         <div class="header-section">
             <h1>miEmpresaACME Cía. Ltda.</h1>
@@ -148,6 +151,8 @@ if pagina == "🏠 Inicio":
 
 # ==================== PÁGINA: NOSOTROS ====================
 elif pagina == "ℹ️ Nosotros":
+    st.image("https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80", use_container_width=True)
+    
     st.markdown("""
         <div class="header-section">
             <h1>Sobre Nosotros</h1>
@@ -221,6 +226,8 @@ elif pagina == "ℹ️ Nosotros":
 
 # ==================== PÁGINA: SERVICIOS ====================
 elif pagina == "💼 Servicios":
+    st.image("https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80", use_container_width=True)
+    
     st.markdown("""
         <div class="header-section">
             <h1>Nuestros Servicios</h1>
@@ -282,6 +289,8 @@ elif pagina == "💼 Servicios":
 
 # ==================== PÁGINA: NOTICIAS ====================
 elif pagina == "📰 Noticias":
+    st.image("https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80", use_container_width=True)
+    
     st.markdown("""
         <div class="header-section">
             <h1>Blog de Noticias</h1>
@@ -327,6 +336,8 @@ elif pagina == "📰 Noticias":
 
 # ==================== PÁGINA: CONTACTO ====================
 elif pagina == "📧 Contacto":
+    st.image("https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80", use_container_width=True)
+    
     st.markdown("""
         <div class="header-section">
             <h1>Contáctanos</h1>
