@@ -487,10 +487,6 @@ with st.sidebar:
         try:
             with open("fotos/logoEmpresa.jpg", "rb") as logo_file:
                 logo_data = base64.b64encode(logo_file.read()).decode()
-                
-                if st.button("", key="logo_btn", use_container_width=True):
-                    st.success("✨ **¡Gracias por visitarnos!**\n\nEstamos aquí para transformar tus proyectos en realidad. Con nuestra experiencia en consultoría gerencial y gestión de proyectos, te ayudamos a alcanzar tus metas empresariales.\n\n🎯 **Estamos listos para impulsar tu éxito**")
-                
                 st.markdown(f"""
                     <div style="
                         background: {theme['bg_secondary']};
@@ -501,7 +497,7 @@ with st.sidebar:
                         animation: slideInDown 0.8s ease-out;
                         transition: all 0.3s ease;
                         cursor: pointer;
-                    " onclick="document.querySelector('[data-testid=stButton][key=logo_btn]').click()">
+                    " onclick="document.getElementById('gameModal').style.display='flex'">
                         <img src="data:image/jpeg;base64,{logo_data}" style="
                             width: 160px;
                             height: auto;
@@ -509,13 +505,14 @@ with st.sidebar:
                             filter: {'brightness(1.3)' if st.session_state.dark_mode else 'brightness(1)'};
                             margin-bottom: 12px;
                             animation: float 3s ease-in-out infinite;
+                            transition: transform 0.3s ease;
                         ">
                         <p style="
                             color: {theme['text_secondary']};
                             font-size: 0.85em;
                             margin: 8px 0 0 0;
                             font-weight: 500;
-                        ">Haz click aquí</p>
+                        ">🎮 Haz click aquí</p>
                     </div>
                 """, unsafe_allow_html=True)
         except Exception as e:
@@ -981,4 +978,222 @@ elif pagina == "📧 Contacto":
         """, unsafe_allow_html=True)
 
 st.divider()
+
+# Juego de Tres en Raya Interactivo
+st.markdown(f"""
+    <style>
+        #gameModal {{
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }}
+        
+        .gameContainer {{
+            background: {theme['bg_secondary']};
+            border: 3px solid {theme['accent_1']};
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            animation: fadeInScale 0.5s ease-out;
+            max-width: 400px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        }}
+        
+        .gameTitle {{
+            color: {theme['text_primary']};
+            font-size: 1.8em;
+            font-weight: 900;
+            margin: 0 0 15px 0;
+        }}
+        
+        .gameSubtitle {{
+            color: {theme['text_secondary']};
+            font-size: 0.95em;
+            margin-bottom: 25px;
+        }}
+        
+        .gameBoard {{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 25px;
+        }}
+        
+        .gameCell {{
+            width: 80px;
+            height: 80px;
+            background: {theme['bg_primary']};
+            border: 2px solid {theme['accent_1']};
+            border-radius: 12px;
+            font-size: 32px;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            color: {theme['text_primary']};
+        }}
+        
+        .gameCell:hover {{
+            background: {theme['accent_1']};
+            transform: scale(1.05);
+        }}
+        
+        .gameStatus {{
+            color: {theme['accent_2']};
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            min-height: 25px;
+        }}
+        
+        .gameButtons {{
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }}
+        
+        .gameBtn {{
+            background: linear-gradient(135deg, {theme['accent_1']}, {theme['accent_2']});
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+        }}
+        
+        .gameBtn:hover {{
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }}
+        
+        .closeBtn {{
+            background: {theme['text_secondary']};
+            color: {theme['bg_secondary']};
+        }}
+        
+        .closeBtn:hover {{
+            background: {theme['text_secondary']};
+        }}
+    </style>
+    
+    <div id="gameModal" onclick="if(event.target.id === 'gameModal') document.getElementById('gameModal').style.display='none'">
+        <div class="gameContainer">
+            <h2 class="gameTitle">🎮 Tres en Raya</h2>
+            <p class="gameSubtitle">¡Desafíate a ti mismo! Tú eres X, yo soy O</p>
+            
+            <div class="gameStatus" id="gameStatus">Presiona una casilla para comenzar</div>
+            
+            <div class="gameBoard" id="gameBoard">
+                <div class="gameCell" onclick="playerMove(0)"></div>
+                <div class="gameCell" onclick="playerMove(1)"></div>
+                <div class="gameCell" onclick="playerMove(2)"></div>
+                <div class="gameCell" onclick="playerMove(3)"></div>
+                <div class="gameCell" onclick="playerMove(4)"></div>
+                <div class="gameCell" onclick="playerMove(5)"></div>
+                <div class="gameCell" onclick="playerMove(6)"></div>
+                <div class="gameCell" onclick="playerMove(7)"></div>
+                <div class="gameCell" onclick="playerMove(8)"></div>
+            </div>
+            
+            <div class="gameButtons">
+                <button class="gameBtn" onclick="resetGame()">🔄 Nuevo Juego</button>
+                <button class="gameBtn closeBtn" onclick="document.getElementById('gameModal').style.display='none'">✖️ Cerrar</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let playerX = 'X';
+        let playerO = 'O';
+        let gameActive = true;
+        
+        const winningConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+        
+        function playerMove(index) {{
+            if (board[index] !== '' || !gameActive) return;
+            
+            board[index] = playerX;
+            updateBoard();
+            
+            if (checkWinner(playerX)) {{
+                document.getElementById('gameStatus').textContent = '🎉 ¡Ganaste! ¡Eres increíble!';
+                gameActive = false;
+                return;
+            }}
+            
+            if (board.every(cell => cell !== '')) {{
+                document.getElementById('gameStatus').textContent = '🤝 ¡Empate!';
+                gameActive = false;
+                return;
+            }}
+            
+            setTimeout(computerMove, 500);
+        }}
+        
+        function computerMove() {{
+            let emptyIndex = board.reduce((acc, cell, i) => cell === '' ? [...acc, i] : acc, []);
+            if (emptyIndex.length === 0) return;
+            
+            let randomIndex = emptyIndex[Math.floor(Math.random() * emptyIndex.length)];
+            board[randomIndex] = playerO;
+            updateBoard();
+            
+            if (checkWinner(playerO)) {{
+                document.getElementById('gameStatus').textContent = '🤖 ¡Gané! Vuelve a intentarlo';
+                gameActive = false;
+                return;
+            }}
+            
+            if (board.every(cell => cell !== '')) {{
+                document.getElementById('gameStatus').textContent = '🤝 ¡Empate!';
+                gameActive = false;
+                return;
+            }}
+        }}
+        
+        function checkWinner(player) {{
+            return winningConditions.some(condition =>
+                condition.every(index => board[index] === player)
+            );
+        }}
+        
+        function updateBoard() {{
+            const cells = document.querySelectorAll('.gameCell');
+            cells.forEach((cell, index) => {{
+                cell.textContent = board[index];
+                cell.style.color = board[index] === 'X' ? '#6366f1' : '#06b6d4';
+            }});
+        }}
+        
+        function resetGame() {{
+            board = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            document.getElementById('gameStatus').textContent = 'Presiona una casilla para comenzar';
+            updateBoard();
+        }}
+    </script>
+""", unsafe_allow_html=True)
+
 st.markdown(f'<div style="text-align:center;color:{theme["text_secondary"]};padding:20px;font-size:0.9em;">© 2024 Consultores Enterprise • Dark Mode ✓ • Versión 2.0 Moderna</div>', unsafe_allow_html=True)
