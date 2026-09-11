@@ -131,77 +131,98 @@ with st.sidebar:
 
 # ==================== PÁGINA: INICIO ====================
 if pagina == "🏠 Inicio":
-    # Carrusel automático de imágenes con CSS
+    import base64
+    
     st.markdown("""
         <div class="header-section" style="text-align: center; margin-bottom: 20px;">
             <h2>Bienvenido a Consultores Enterprise. S. A.</h2>
             <p style="font-size: 1.1em;">Consultoría Gerencial y Administración de Proyectos</p>
         </div>
-        
-        <style>
-            .carousel {
-                position: relative;
-                width: 100%;
-                max-width: 100%;
-                margin: 0 auto;
-                overflow: hidden;
-                border-radius: 10px;
-                box-shadow: 0 4px 15px rgba(0, 153, 255, 0.3);
-            }
-            
-            .carousel-inner {
-                display: flex;
-                animation: slide 20s infinite;
-            }
-            
-            .carousel-item {
-                min-width: 100%;
-                flex: 0 0 100%;
-            }
-            
-            .carousel-item img {
-                width: 100%;
-                height: auto;
-                display: block;
-            }
-            
-            @keyframes slide {
-                0% { transform: translateX(0); }
-                20% { transform: translateX(0); }
-                25% { transform: translateX(-100%); }
-                45% { transform: translateX(-100%); }
-                50% { transform: translateX(-200%); }
-                70% { transform: translateX(-200%); }
-                75% { transform: translateX(-300%); }
-                95% { transform: translateX(-300%); }
-                100% { transform: translateX(-400%); }
-            }
-            
-            .carousel-counter {
-                position: absolute;
-                bottom: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                background-color: rgba(0, 153, 255, 0.9);
-                color: white;
-                padding: 10px 20px;
-                border-radius: 20px;
-                font-weight: bold;
-                z-index: 10;
-            }
-        </style>
-        
-        <div class="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item"><img src="fotos/fotoInicio.jpg" alt="Foto 1"></div>
-                <div class="carousel-item"><img src="fotos/fotoInicio1.jpg" alt="Foto 2"></div>
-                <div class="carousel-item"><img src="fotos/fotoInicio2.jpg" alt="Foto 3"></div>
-                <div class="carousel-item"><img src="fotos/fotoInicio3.jpg" alt="Foto 4"></div>
-                <div class="carousel-item"><img src="fotos/fotoInicio4.jpg" alt="Foto 5"></div>
-            </div>
-            <div class="carousel-counter">Galería automática - 5 fotos</div>
-        </div>
     """, unsafe_allow_html=True)
+    
+    # Convertir imágenes a base64
+    fotos = [
+        "fotos/fotoInicio.jpg",
+        "fotos/fotoInicio1.jpg",
+        "fotos/fotoInicio2.jpg",
+        "fotos/fotoInicio3.jpg",
+        "fotos/fotoInicio4.jpg"
+    ]
+    
+    # Crear carrusel con las imágenes
+    carousel_html = """
+    <style>
+        .carousel {
+            position: relative;
+            width: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 153, 255, 0.3);
+        }
+        
+        .carousel-inner {
+            display: flex;
+            animation: slide 25s infinite;
+        }
+        
+        .carousel-item {
+            min-width: 100%;
+            flex: 0 0 100%;
+        }
+        
+        .carousel-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(0); }
+            25% { transform: translateX(-100%); }
+            45% { transform: translateX(-100%); }
+            50% { transform: translateX(-200%); }
+            70% { transform: translateX(-200%); }
+            75% { transform: translateX(-300%); }
+            95% { transform: translateX(-300%); }
+            100% { transform: translateX(-400%); }
+        }
+        
+        .carousel-counter {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 153, 255, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            z-index: 10;
+        }
+    </style>
+    
+    <div class="carousel">
+        <div class="carousel-inner">
+    """
+    
+    # Agregar cada imagen
+    for foto in fotos:
+        try:
+            with open(foto, "rb") as img_file:
+                img_base64 = base64.b64encode(img_file.read()).decode()
+                carousel_html += f'<div class="carousel-item"><img src="data:image/jpeg;base64,{img_base64}" alt="Foto"></div>'
+        except:
+            carousel_html += f'<div class="carousel-item" style="background-color: #e8f4f8; display: flex; align-items: center; justify-content: center;"><p>Imagen no encontrada</p></div>'
+    
+    carousel_html += """
+        </div>
+        <div class="carousel-counter">Galería automática - 5 fotos</div>
+    </div>
+    """
+    
+    st.markdown(carousel_html, unsafe_allow_html=True)
     
     st.divider()
     
