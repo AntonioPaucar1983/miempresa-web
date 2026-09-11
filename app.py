@@ -14,6 +14,19 @@ st.set_page_config(
 # Estilos CSS personalizados con tema celeste
 st.markdown("""
     <style>
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-section {
+                padding: 20px 10px !important;
+            }
+            .header-section h1 {
+                font-size: 1.8em !important;
+            }
+            .metric-card {
+                padding: 20px 10px !important;
+            }
+        }
+        
         :root {
             --color-primary: #0099ff;
             --color-secondary: #00ccff;
@@ -62,6 +75,40 @@ st.markdown("""
             border-radius: 8px;
             border: 2px solid #0099ff;
         }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #0099ff 0%, #00ccff 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 153, 255, 0.3);
+        }
+        
+        .metric-value {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .metric-label {
+            font-size: 16px;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+        
+        .metric-delta {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-top: 10px;
+        }
+        
+        /* Imágenes responsive */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -84,10 +131,8 @@ with st.sidebar:
 
 # ==================== PÁGINA: INICIO ====================
 if pagina == "🏠 Inicio":
-    # Banner con imagen redimensionada
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.image("fotos/fotoInicio.jpg", width=400)
+    # Banner con imagen responsive
+    st.image("fotos/fotoInicio.jpg", use_container_width=True)
     
     st.markdown("""
         <div class="header-section">
@@ -245,6 +290,7 @@ if pagina == "🏠 Inicio":
 
 # ==================== PÁGINA: NOSOTROS ====================
 elif pagina == "ℹ️ Nosotros":
+    # Imagen responsive
     st.image("https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80", use_container_width=True)
     
     st.markdown("""
