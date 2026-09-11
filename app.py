@@ -484,12 +484,21 @@ with st.sidebar:
             st.rerun()
     
     with col1:
-        st.markdown(f"""
-            <div style="text-align: center; padding: 20px 0;">
-                <h2 style="color: {theme['accent_1']}; margin: 0; font-size: 1.6em;">CE</h2>
-                <p style="color: {theme['text_secondary']}; font-size: 0.8em; margin: 0;">Moderna</p>
-            </div>
-        """, unsafe_allow_html=True)
+        try:
+            with open("fotos/logoEmpresa.jpg", "rb") as logo_file:
+                logo_data = base64.b64encode(logo_file.read()).decode()
+                st.markdown(f"""
+                    <div style="text-align: center; padding: 15px 0;">
+                        <img src="data:image/jpeg;base64,{logo_data}" style="width: 100px; height: auto; object-fit: contain; filter: {'brightness(1.2)' if st.session_state.dark_mode else 'brightness(1)'};">
+                    </div>
+                """, unsafe_allow_html=True)
+        except:
+            st.markdown(f"""
+                <div style="text-align: center; padding: 20px 0;">
+                    <h2 style="color: {theme['accent_1']}; margin: 0; font-size: 1.6em;">CE</h2>
+                    <p style="color: {theme['text_secondary']}; font-size: 0.8em; margin: 0;">Moderna</p>
+                </div>
+            """, unsafe_allow_html=True)
     
     st.divider()
 
