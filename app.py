@@ -3,6 +3,7 @@ from datetime import datetime
 import plotly.graph_objects as go
 import plotly.express as px
 import base64
+import random
 
 st.set_page_config(
     page_title="Consultores Enterprise. S. A.",
@@ -13,6 +14,18 @@ st.set_page_config(
 
 if 'dark_mode' not in st.session_state:
     st.session_state.dark_mode = False
+
+if 'visitas' not in st.session_state:
+    st.session_state.visitas = 200
+
+if 'usuarios_online' not in st.session_state:
+    st.session_state.usuarios_online = random.randint(10, 25)
+
+# Incrementar visitas
+st.session_state.visitas += 1
+# Variar usuarios en línea
+if random.random() > 0.7:
+    st.session_state.usuarios_online = random.randint(10, 25)
 
 LIGHT_MODE = {
     "bg_primary": "#ffffff",
@@ -71,13 +84,104 @@ st.markdown(f"""
             color: {theme['text_primary']};
         }}
         
+        @keyframes slideInDown {{
+            from {{
+                opacity: 0;
+                transform: translateY(-30px);
+            }}
+            to {{
+                opacity: 1;
+                transform: translateY(0);
+            }}
+        }}
+        
+        @keyframes slideInUp {{
+            from {{
+                opacity: 0;
+                transform: translateY(30px);
+            }}
+            to {{
+                opacity: 1;
+                transform: translateY(0);
+            }}
+        }}
+        
+        @keyframes fadeInScale {{
+            from {{
+                opacity: 0;
+                transform: scale(0.9);
+            }}
+            to {{
+                opacity: 1;
+                transform: scale(1);
+            }}
+        }}
+        
+        @keyframes pulse {{
+            0% {{
+                transform: scale(1);
+                opacity: 1;
+            }}
+            50% {{
+                transform: scale(1.05);
+                opacity: 0.8;
+            }}
+            100% {{
+                transform: scale(1);
+                opacity: 1;
+            }}
+        }}
+        
+        @keyframes glow {{
+            0%, 100% {{
+                box-shadow: 0 0 10px rgba({theme['accent_1']}, 0.3);
+            }}
+            50% {{
+                box-shadow: 0 0 20px rgba({theme['accent_1']}, 0.6);
+            }}
+        }}
+        
+        @keyframes countUp {{
+            from {{
+                opacity: 0;
+                transform: translateY(-10px);
+            }}
+            to {{
+                opacity: 1;
+                transform: translateY(0);
+            }}
+        }}
+        
+        @keyframes float {{
+            0%, 100% {{
+                transform: translateY(0px);
+            }}
+            50% {{
+                transform: translateY(-10px);
+            }}
+        }}
+        
         .header-modern {{
             background: linear-gradient(135deg, {theme['accent_1']} 0%, {theme['accent_2']} 100%);
-            padding: 60px 40px;
+            padding: 80px 40px;
             border-radius: 20px;
             text-align: center;
             margin-bottom: 50px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            animation: slideInDown 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }}
+        
+        .header-modern::before {{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1), transparent);
+            pointer-events: none;
         }}
         
         .header-modern h1 {{
@@ -86,6 +190,9 @@ st.markdown(f"""
             margin: 0;
             color: white;
             text-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+            animation: slideInDown 1s ease-out;
         }}
         
         .header-modern p {{
@@ -93,28 +200,97 @@ st.markdown(f"""
             font-size: 1.2em;
             margin-top: 10px;
             font-weight: 500;
+            position: relative;
+            z-index: 1;
+            animation: slideInUp 1s ease-out 0.2s backwards;
         }}
         
-        @media (max-width: 768px) {{
-            .header-modern h1 {{
-                font-size: 2em;
-            }}
-            .header-modern p {{
-                font-size: 1em;
-            }}
-            .header-modern {{
-                padding: 40px 20px;
-                margin-bottom: 30px;
-            }}
+        .stats-bar {{
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 30px 0;
+            animation: slideInUp 1s ease-out 0.4s backwards;
+        }}
+        
+        .stat-item {{
+            background: {theme['bg_secondary']};
+            padding: 20px 30px;
+            border-radius: 12px;
+            border: 2px solid {theme['accent_1']};
+            text-align: center;
+            animation: fadeInScale 0.8s ease-out;
+            transition: all 0.3s ease;
+        }}
+        
+        .stat-item:hover {{
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba({theme['accent_1']}, 0.2);
+            border-color: {theme['accent_2']};
+        }}
+        
+        .stat-number {{
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(135deg, {theme['accent_1']}, {theme['accent_2']});
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: countUp 1s ease-out;
+        }}
+        
+        .stat-label {{
+            font-size: 12px;
+            color: {theme['text_secondary']};
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }}
+        
+        .online-badge {{
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }}
+        
+        .online-dot {{
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
         }}
         
         .proposito-moderno {{
             background: linear-gradient(135deg, {theme['accent_3']} 0%, {theme['accent_4']} 100%);
-            padding: 60px 40px;
+            padding: 80px 50px;
             border-radius: 20px;
             text-align: center;
             margin: 60px 0;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+            animation: slideInUp 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }}
+        
+        .proposito-moderno::before {{
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: float 20s linear infinite;
         }}
         
         .proposito-moderno h2 {{
@@ -122,6 +298,8 @@ st.markdown(f"""
             font-size: 2.5em;
             font-weight: 900;
             margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
         }}
         
         .proposito-moderno h3 {{
@@ -130,19 +308,8 @@ st.markdown(f"""
             line-height: 1.6;
             font-weight: 700;
             margin: 0;
-        }}
-        
-        @media (max-width: 768px) {{
-            .proposito-moderno {{
-                padding: 40px 20px;
-                margin: 40px 0;
-            }}
-            .proposito-moderno h2 {{
-                font-size: 1.8em;
-            }}
-            .proposito-moderno h3 {{
-                font-size: 1.3em;
-            }}
+            position: relative;
+            z-index: 1;
         }}
         
         .metric-modern {{
@@ -151,12 +318,13 @@ st.markdown(f"""
             border-radius: 16px;
             border: 2px solid {theme['accent_1']};
             text-align: center;
-            transition: all 0.4s ease;
+            animation: fadeInScale 0.8s ease-out;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }}
         
         .metric-modern:hover {{
-            transform: translateY(-15px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            transform: translateY(-20px) scale(1.05);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
             border-color: {theme['accent_2']};
         }}
         
@@ -176,24 +344,13 @@ st.markdown(f"""
             letter-spacing: 1px;
         }}
         
-        @media (max-width: 768px) {{
-            .metric-modern {{
-                padding: 20px;
-            }}
-            .metric-value {{
-                font-size: 38px;
-            }}
-            .metric-label {{
-                font-size: 12px;
-            }}
-        }}
-        
         .service-modern {{
             background: {theme['bg_secondary']};
             padding: 30px;
             border-radius: 16px;
             border-left: 5px solid;
             margin-bottom: 20px;
+            animation: slideInUp 0.6s ease-out;
             transition: all 0.3s ease;
         }}
         
@@ -216,24 +373,13 @@ st.markdown(f"""
             color: {theme['text_secondary']};
         }}
         
-        @media (max-width: 768px) {{
-            .service-modern {{
-                padding: 20px;
-            }}
-            .service-modern h3 {{
-                font-size: 1.1em;
-            }}
-            .service-modern p {{
-                font-size: 0.9em;
-            }}
-        }}
-        
         .project-modern {{
             background: {theme['bg_secondary']};
             padding: 30px;
             border-radius: 16px;
             margin-bottom: 20px;
             border-top: 4px solid {theme['accent_2']};
+            animation: slideInUp 0.6s ease-out;
             transition: all 0.3s ease;
         }}
         
@@ -255,21 +401,13 @@ st.markdown(f"""
             margin: 10px 0;
         }}
         
-        @media (max-width: 768px) {{
-            .project-modern {{
-                padding: 20px;
-            }}
-            .project-modern h3 {{
-                font-size: 1.1em;
-            }}
-        }}
-        
         .section-title {{
             font-size: 2.8em;
             font-weight: 900;
             text-align: center;
             margin: 50px 0 15px 0;
             color: {theme['accent_1']};
+            animation: slideInDown 0.8s ease-out;
         }}
         
         .section-subtitle {{
@@ -278,26 +416,30 @@ st.markdown(f"""
             color: {theme['text_secondary']};
             margin-bottom: 40px;
             font-weight: 500;
-        }}
-        
-        @media (max-width: 768px) {{
-            .section-title {{
-                font-size: 1.8em;
-                margin: 30px 0 10px 0;
-            }}
-            .section-subtitle {{
-                font-size: 0.95em;
-                margin-bottom: 25px;
-            }}
+            animation: slideInUp 0.8s ease-out;
         }}
         
         .cta-section {{
             background: linear-gradient(135deg, {theme['accent_1']} 0%, {theme['accent_2']} 100%);
-            padding: 50px 40px;
+            padding: 60px 40px;
             border-radius: 20px;
             text-align: center;
             margin: 50px 0;
             color: white;
+            animation: slideInUp 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }}
+        
+        .cta-section::before {{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1), transparent);
+            pointer-events: none;
         }}
         
         .cta-section h3 {{
@@ -305,6 +447,8 @@ st.markdown(f"""
             margin-top: 0;
             margin-bottom: 10px;
             color: white;
+            position: relative;
+            z-index: 1;
         }}
         
         .cta-section p {{
@@ -312,18 +456,21 @@ st.markdown(f"""
             opacity: 0.95;
             color: white;
             margin: 0;
+            position: relative;
+            z-index: 1;
         }}
         
         @media (max-width: 768px) {{
-            .cta-section {{
-                padding: 35px 20px;
-                margin: 35px 0;
+            .header-modern h1 {{
+                font-size: 2em;
             }}
-            .cta-section h3 {{
-                font-size: 1.4em;
+            .header-modern {{
+                padding: 40px 20px;
+                margin-bottom: 30px;
             }}
-            .cta-section p {{
-                font-size: 0.95em;
+            .stats-bar {{
+                flex-direction: column;
+                gap: 15px;
             }}
         }}
     </style>
@@ -360,6 +507,25 @@ if pagina == "🏠 Inicio":
         </div>
     """, unsafe_allow_html=True)
     
+    st.markdown(f"""
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number">{st.session_state.visitas}</div>
+                <div class="stat-label">Visitas Hoy</div>
+            </div>
+            <div class="stat-item">
+                <div class="online-badge">
+                    <div class="online-dot"></div>
+                    {st.session_state.usuarios_online}+ En línea
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">45+</div>
+                <div class="stat-label">Proyectos Activos</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+    
     fotos = ["fotos/fotoInicio.jpg", "fotos/fotoInicio1.jpg", "fotos/fotoInicio2.jpg", "fotos/fotoInicio3.jpg", "fotos/fotoInicio4.jpg"]
     
     carousel_html = f"""
@@ -372,6 +538,7 @@ if pagina == "🏠 Inicio":
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
             max-height: 500px;
+            animation: slideInUp 0.8s ease-out;
         }}
         .carousel-inner {{
             display: flex;
@@ -405,15 +572,6 @@ if pagina == "🏠 Inicio":
             font-weight: 600;
             z-index: 10;
             font-size: 0.9em;
-        }}
-        @media (max-width: 768px) {{
-            .carousel {{
-                max-height: 300px;
-                margin: 20px auto;
-            }}
-            .carousel-item img {{
-                height: 300px;
-            }}
         }}
     </style>
     <div class="carousel">
@@ -508,29 +666,27 @@ elif pagina == "ℹ️ Nosotros":
         {
             "archivo": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&q=80",
             "titulo": "Liderazgo Ejecutivo",
-            "desc": "Nuestros gerentes aportan visión estratégica y experiencia comprobada. Con más de 15 años en consultoría, dirigen cada proyecto con excelencia y compromiso hacia resultados transformadores para tu empresa.",
+            "desc": "Nuestros gerentes aportan visión estratégica y experiencia comprobada.",
             "tipo": "url"
         },
         {
             "archivo": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=500&q=80",
             "titulo": "Ingeniería de Soluciones",
-            "desc": "Ingenieros especializados que diseñan y ejecutan soluciones complejas. Combinan metodologías avanzadas con innovación tecnológica para resolver los desafíos más exigentes de tu negocio.",
+            "desc": "Ingenieros especializados que diseñan y ejecutan soluciones complejas.",
             "tipo": "url"
         },
         {
             "archivo": "fotos/consultoras.jpg",
             "titulo": "Consultoría Especializada",
-            "desc": "Consultores con expertise en diversos sectores económicos. Aportan perspectivas frescas y estrategias probadas que aceleran la transformación y crecimiento de tu organización.",
+            "desc": "Consultores con expertise en diversos sectores económicos.",
             "tipo": "local"
         }
     ]
     
     cols = [col1, col2, col3]
-    
     for idx, (col, person) in enumerate(zip(cols, equipo)):
         with col:
             try:
-                # Si es URL de internet
                 if person["tipo"] == "url":
                     st.markdown(f"""
                         <div style="
@@ -538,7 +694,7 @@ elif pagina == "ℹ️ Nosotros":
                             border-radius: 16px;
                             overflow: hidden;
                             border: 2px solid {theme['accent_1']};
-                            transition: all 0.3s ease;
+                            animation: fadeInScale 0.8s ease-out;
                         ">
                             <img src="{person['archivo']}" style="width:100%; height:300px; object-fit:cover;">
                             <div style="padding: 25px;">
@@ -547,7 +703,6 @@ elif pagina == "ℹ️ Nosotros":
                             </div>
                         </div>
                     """, unsafe_allow_html=True)
-                # Si es archivo local
                 else:
                     with open(person["archivo"], "rb") as f:
                         img_data = base64.b64encode(f.read()).decode()
@@ -557,7 +712,7 @@ elif pagina == "ℹ️ Nosotros":
                                 border-radius: 16px;
                                 overflow: hidden;
                                 border: 2px solid {theme['accent_1']};
-                                transition: all 0.3s ease;
+                                animation: fadeInScale 0.8s ease-out;
                             ">
                                 <img src="data:image/jpeg;base64,{img_data}" style="width:100%; height:300px; object-fit:cover;">
                                 <div style="padding: 25px;">
@@ -568,16 +723,9 @@ elif pagina == "ℹ️ Nosotros":
                         """, unsafe_allow_html=True)
             except:
                 st.markdown(f"""
-                    <div style="
-                        background: {theme['bg_secondary']};
-                        border-radius: 16px;
-                        padding: 40px;
-                        border: 2px solid {theme['accent_1']};
-                        text-align: center;
-                    ">
+                    <div style="background: {theme['bg_secondary']}; border-radius: 16px; padding: 40px; border: 2px solid {theme['accent_1']}; text-align: center;">
                         <p style="color: {theme['text_secondary']};">📷 Imagen no encontrada</p>
-                        <h3 style="color: {theme['accent_1']}; margin-top: 15px;">{person['titulo']}</h3>
-                        <p style="color: {theme['text_secondary']}; font-size: 0.9em;">{person['desc']}</p>
+                        <h3 style="color: {theme['accent_1']};">{person['titulo']}</h3>
                     </div>
                 """, unsafe_allow_html=True)
 
@@ -647,7 +795,7 @@ elif pagina == "📧 Contacto":
         """, unsafe_allow_html=True)
         
         st.markdown(f"""
-            <div style="background: {theme['bg_secondary']}; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+            <div style="background: {theme['bg_secondary']}; padding: 20px; border-radius: 12px; margin-bottom: 15px; animation: slideInUp 0.6s ease-out;">
                 <p style="color:{theme['text_primary']}; font-weight: 700; margin: 0 0 10px 0;"><strong>Quito</strong></p>
                 <p style="color:{theme['text_secondary']}; font-size:0.95em; margin: 0;">Av. Amazonas N34-451</p>
                 <p style="color:{theme['text_secondary']}; font-size:0.95em; margin: 5px 0 0 0;">📞 +593 2 XXXX-XXXX</p>
@@ -655,7 +803,7 @@ elif pagina == "📧 Contacto":
         """, unsafe_allow_html=True)
         
         st.markdown(f"""
-            <div style="background: {theme['bg_secondary']}; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+            <div style="background: {theme['bg_secondary']}; padding: 20px; border-radius: 12px; margin-bottom: 15px; animation: slideInUp 0.7s ease-out;">
                 <p style="color:{theme['text_primary']}; font-weight: 700; margin: 0 0 10px 0;"><strong>Guayaquil</strong></p>
                 <p style="color:{theme['text_secondary']}; font-size:0.95em; margin: 0;">Parque Empresarial</p>
                 <p style="color:{theme['text_secondary']}; font-size:0.95em; margin: 5px 0 0 0;">📞 +593 4 XXXX-XXXX</p>
@@ -663,7 +811,7 @@ elif pagina == "📧 Contacto":
         """, unsafe_allow_html=True)
         
         st.markdown(f"""
-            <div style="background: {theme['bg_secondary']}; padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+            <div style="background: {theme['bg_secondary']}; padding: 20px; border-radius: 12px; margin-bottom: 25px; animation: slideInUp 0.8s ease-out;">
                 <p style="color:{theme['text_primary']}; font-weight: 700; margin: 0 0 10px 0;"><strong>Cuenca</strong></p>
                 <p style="color:{theme['text_secondary']}; font-size:0.95em; margin: 0;">Av. Gran Colombia</p>
                 <p style="color:{theme['text_secondary']}; font-size:0.95em; margin: 5px 0 0 0;">📞 +593 7 XXXX-XXXX</p>
@@ -690,6 +838,8 @@ elif pagina == "📧 Contacto":
                     text-decoration: none;
                     font-weight: bold;
                     font-size: 24px;
+                    transition: all 0.3s ease;
+                    animation: fadeInScale 0.6s ease-out;
                 ">📘</a>
             """, unsafe_allow_html=True)
         
@@ -707,6 +857,7 @@ elif pagina == "📧 Contacto":
                     text-decoration: none;
                     font-weight: bold;
                     font-size: 24px;
+                    animation: fadeInScale 0.7s ease-out;
                 ">📷</a>
             """, unsafe_allow_html=True)
         
@@ -724,6 +875,7 @@ elif pagina == "📧 Contacto":
                     text-decoration: none;
                     font-weight: bold;
                     font-size: 24px;
+                    animation: fadeInScale 0.8s ease-out;
                 ">🔗</a>
             """, unsafe_allow_html=True)
         
@@ -741,11 +893,12 @@ elif pagina == "📧 Contacto":
                     text-decoration: none;
                     font-weight: bold;
                     font-size: 20px;
+                    animation: fadeInScale 0.9s ease-out;
                 ">𝕏</a>
             """, unsafe_allow_html=True)
         
         st.markdown(f"""
-            <div style="background: linear-gradient(135deg, {theme['accent_2']} 0%, {theme['accent_1']} 100%); padding: 25px; border-radius: 12px; margin-top: 25px; text-align: center;">
+            <div style="background: linear-gradient(135deg, {theme['accent_2']} 0%, {theme['accent_1']} 100%); padding: 25px; border-radius: 12px; margin-top: 25px; text-align: center; animation: slideInUp 1s ease-out;">
                 <p style="color: white; font-size: 1.05em; margin-bottom: 12px;"><strong>💬 Contáctanos por WhatsApp</strong></p>
                 <a href="https://wa.me/593XXXXXXXXXX?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20sus%20servicios" target="_blank" style="
                     display: inline-block;
@@ -784,7 +937,7 @@ elif pagina == "📧 Contacto":
                 st.error("⚠️ Por favor completa todos los campos requeridos.")
         
         st.markdown(f"""
-            <div style="background: {theme['bg_secondary']}; padding: 20px; border-radius: 12px; margin-top: 20px; border-left: 4px solid {theme['accent_2']};">
+            <div style="background: {theme['bg_secondary']}; padding: 20px; border-radius: 12px; margin-top: 20px; border-left: 4px solid {theme['accent_2']};animation: slideInUp 1s ease-out;">
                 <p style="color:{theme['text_primary']}; font-weight: 700; margin-top: 0;"><strong>⏰ Horarios de Atención</strong></p>
                 <p style="color:{theme['text_secondary']}; font-size: 0.95em; margin: 8px 0;"><strong>Lunes - Viernes:</strong> 8:00 AM - 6:00 PM</p>
                 <p style="color:{theme['text_secondary']}; font-size: 0.95em; margin: 8px 0;"><strong>Sábado:</strong> 9:00 AM - 1:00 PM</p>
@@ -793,4 +946,4 @@ elif pagina == "📧 Contacto":
         """, unsafe_allow_html=True)
 
 st.divider()
-st.markdown(f'<div style="text-align:center;color:{theme["text_secondary"]};padding:20px;font-size:0.9em;">© 2024 Consultores Enterprise • Dark Mode ✓</div>', unsafe_allow_html=True)
+st.markdown(f'<div style="text-align:center;color:{theme["text_secondary"]};padding:20px;font-size:0.9em;">© 2024 Consultores Enterprise • Dark Mode ✓ • Versión 2.0 Moderna</div>', unsafe_allow_html=True)
