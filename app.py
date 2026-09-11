@@ -82,8 +82,8 @@ with st.sidebar:
 
 # ==================== PÁGINA: INICIO ====================
 if pagina == "🏠 Inicio":
-    # Banner con imagen
-    st.image("https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80", use_container_width=True)
+    # Banner con imagen local
+    st.image("fotos/fotoInicio.jpg", use_container_width=True)
     
     st.markdown("""
         <div class="header-section">
@@ -93,28 +93,63 @@ if pagina == "🏠 Inicio":
         </div>
     """, unsafe_allow_html=True)
     
-    col1, col2, col3 = st.columns(3)
+    # Dashboard de Métricas Profesional
+    st.markdown("""
+        <style>
+            .metric-card {
+                background: linear-gradient(135deg, #0099ff 0%, #00ccff 100%);
+                color: white;
+                padding: 30px;
+                border-radius: 12px;
+                text-align: center;
+                box-shadow: 0 4px 15px rgba(0, 153, 255, 0.3);
+            }
+            .metric-value {
+                font-size: 48px;
+                font-weight: bold;
+                margin: 15px 0;
+            }
+            .metric-label {
+                font-size: 16px;
+                opacity: 0.95;
+                margin-bottom: 10px;
+            }
+            .metric-delta {
+                font-size: 13px;
+                opacity: 0.85;
+                margin-top: 10px;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns(3, gap="large")
     
     with col1:
-        st.metric(
-            label="📊 Proyectos Completados",
-            value="45+",
-            delta="+5 este año"
-        )
+        st.markdown("""
+            <div class="metric-card">
+                <div class="metric-label">📊 Proyectos Completados</div>
+                <div class="metric-value">45+</div>
+                <div class="metric-delta">↑ 15 este año</div>
+            </div>
+        """, unsafe_allow_html=True)
     
     with col2:
-        st.metric(
-            label="🤝 Clientes Satisfechos",
-            value="32",
-            delta="En Ecuador"
-        )
+        st.markdown("""
+            <div class="metric-card">
+                <div class="metric-label">😊 Clientes Satisfechos</div>
+                <div class="metric-value">32</div>
+                <div class="metric-delta">✓ En Ecuador</div>
+            </div>
+        """, unsafe_allow_html=True)
     
     with col3:
-        st.metric(
-            label="📈 Años de Experiencia",
-            value="12",
-            delta="En el mercado"
-        )
+        st.markdown("""
+            <div class="metric-card">
+                <div class="metric-label">📈 Años de Experiencia</div>
+                <div class="metric-value">12</div>
+                <div class="metric-delta">✓ En el mercado</div>
+            </div>
+        """, unsafe_allow_html=True)
     
     st.divider()
     
