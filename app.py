@@ -1,5 +1,5 @@
-import streamlit as st
-from datetime import datetime
+import plotly.graph_objects as go
+import plotly.express as px
 
 # Configuración de la página
 st.set_page_config(
@@ -93,35 +93,14 @@ if pagina == "🏠 Inicio":
         </div>
     """, unsafe_allow_html=True)
     
-    # Dashboard de Métricas Profesional
+    # Dashboard de Métricas Profesional con Gráficos
     st.markdown("""
-        <style>
-            .metric-card {
-                background: linear-gradient(135deg, #0099ff 0%, #00ccff 100%);
-                color: white;
-                padding: 30px;
-                border-radius: 12px;
-                text-align: center;
-                box-shadow: 0 4px 15px rgba(0, 153, 255, 0.3);
-            }
-            .metric-value {
-                font-size: 48px;
-                font-weight: bold;
-                margin: 15px 0;
-            }
-            .metric-label {
-                font-size: 16px;
-                opacity: 0.95;
-                margin-bottom: 10px;
-            }
-            .metric-delta {
-                font-size: 13px;
-                opacity: 0.85;
-                margin-top: 10px;
-            }
-        </style>
+        <div class="header-section" style="text-align: center; margin-bottom: 30px;">
+            <h2>Nuestro Desempeño 2024</h2>
+        </div>
     """, unsafe_allow_html=True)
     
+    # Fila 1: Métricas principales
     col1, col2, col3 = st.columns(3, gap="large")
     
     with col1:
@@ -150,6 +129,82 @@ if pagina == "🏠 Inicio":
                 <div class="metric-delta">✓ En el mercado</div>
             </div>
         """, unsafe_allow_html=True)
+    
+    st.divider()
+    
+    # Fila 2: Gráficos
+    col1, col2 = st.columns(2, gap="large")
+    
+    with col1:
+        # Gráfico de Proyectos por Año
+        fig_proyectos = go.Figure(data=[
+            go.Bar(x=['2020', '2021', '2022', '2023', '2024'], 
+                   y=[8, 12, 15, 18, 45],
+                   marker=dict(color=['#0099ff', '#00ccff', '#0099ff', '#00ccff', '#0099ff']))
+        ])
+        fig_proyectos.update_layout(
+            title="Proyectos por Año",
+            xaxis_title="Año",
+            yaxis_title="Cantidad",
+            hovermode='x unified',
+            height=350,
+            template="plotly_white",
+            showlegend=False
+        )
+        st.plotly_chart(fig_proyectos, use_container_width=True)
+    
+    with col2:
+        # Gráfico Pie: Sectores
+        sectores = ['Manufactura', 'Servicios', 'Educación', 'Público', 'Comercio']
+        valores = [8, 10, 6, 5, 3]
+        
+        fig_sectores = go.Figure(data=[go.Pie(labels=sectores, values=valores,
+                                               marker=dict(colors=['#0099ff', '#00ccff', '#005fa3', '#0077cc', '#00d4ff']))])
+        fig_sectores.update_layout(
+            title="Clientes por Sector",
+            height=350,
+            showlegend=True
+        )
+        st.plotly_chart(fig_sectores, use_container_width=True)
+    
+    # Fila 3: Más gráficos
+    col1, col2 = st.columns(2, gap="large")
+    
+    with col1:
+        # Gráfico de Línea: Satisfacción
+        meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+        satisfaccion = [88, 90, 89, 92, 93, 91, 94, 95, 93, 96, 97, 98]
+        
+        fig_satisfaccion = go.Figure()
+        fig_satisfaccion.add_trace(go.Scatter(x=meses, y=satisfaccion, mode='lines+markers',
+                                              line=dict(color='#0099ff', width=3),
+                                              marker=dict(size=8, color='#00ccff')))
+        fig_satisfaccion.update_layout(
+            title="Índice de Satisfacción de Clientes (%)",
+            xaxis_title="Mes",
+            yaxis_title="Porcentaje",
+            height=350,
+            template="plotly_white",
+            hovermode='x unified'
+        )
+        st.plotly_chart(fig_satisfaccion, use_container_width=True)
+    
+    with col2:
+        # Gráfico Donut: Distribución de Servicios
+        servicios = ['Diagnóstico', 'Planificación', 'Optimización', 'Capacitación', 'Gestión Cambio']
+        distribucion = [20, 25, 20, 18, 17]
+        
+        fig_servicios = go.Figure(data=[go.Pie(
+            labels=servicios, 
+            values=distribucion,
+            hole=.4,
+            marker=dict(colors=['#0099ff', '#00ccff', '#005fa3', '#0077cc', '#00d4ff'])
+        )])
+        fig_servicios.update_layout(
+            title="Distribución de Servicios Prestados",
+            height=350
+        )
+        st.plotly_chart(fig_servicios, use_container_width=True)
     
     st.divider()
     
