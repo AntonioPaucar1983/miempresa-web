@@ -587,16 +587,26 @@ elif pagina == "💼 Servicios":
     st.divider()
     
     servicios = [
-        {"titulo": "🔍 Diagnóstico Empresarial", "color": theme['accent_1'], "desc": "Evaluación integral para identificar oportunidades"},
-        {"titulo": "📋 Administración de Proyectos", "color": theme['accent_2'], "desc": "Gestión profesional con metodologías PMI/PMBOK"},
-        {"titulo": "🎯 Planificación Estratégica", "color": theme['accent_3'], "desc": "Estrategias claras para crecimiento sostenible"},
-        {"titulo": "⚙️ Optimización de Procesos", "color": theme['accent_4'], "desc": "Mejora continua para eficiencia y reducción de costos"},
-        {"titulo": "🔄 Gestión del Cambio", "color": theme['accent_1'], "desc": "Transformación organizacional y cultural"},
-        {"titulo": "📚 Capacitación Ejecutiva", "color": theme['accent_2'], "desc": "Programas personalizados para líderes"}
+        {"titulo": "🔍 Diagnóstico Empresarial", "color": theme['accent_1'], "desc": "Evaluación integral para identificar oportunidades", "foto": "https://images.unsplash.com/photo-1460925895917-adf4e38df61e?w=300&q=80"},
+        {"titulo": "📋 Administración de Proyectos", "color": theme['accent_2'], "desc": "Gestión profesional con metodologías PMI/PMBOK", "foto": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&q=80"},
+        {"titulo": "🎯 Planificación Estratégica", "color": theme['accent_3'], "desc": "Estrategias claras para crecimiento sostenible", "foto": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&q=80"},
+        {"titulo": "⚙️ Optimización de Procesos", "color": theme['accent_4'], "desc": "Mejora continua para eficiencia y reducción de costos", "foto": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=300&q=80"},
+        {"titulo": "🔄 Gestión del Cambio", "color": theme['accent_1'], "desc": "Transformación organizacional y cultural", "foto": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&q=80"},
+        {"titulo": "📚 Capacitación Ejecutiva", "color": theme['accent_2'], "desc": "Programas personalizados para líderes", "foto": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&q=80"}
     ]
     
     for s in servicios:
-        st.markdown(f'<div class="service-modern" style="border-left-color:{s["color"]}"><h3 style="color:{s["color"]}">{s["titulo"]}</h3><p>{s["desc"]}</p></div>', unsafe_allow_html=True)
+        st.markdown(f'''
+            <div class="service-modern" style="border-left-color:{s["color"]}; display: flex; gap: 20px;">
+                <div style="flex: 0 0 120px;">
+                    <img src="{s["foto"]}" style="width: 120px; height: 100px; object-fit: cover; border-radius: 12px;">
+                </div>
+                <div style="flex: 1;">
+                    <h3 style="color:{s["color"]}; margin-top: 0;">{s["titulo"]}</h3>
+                    <p>{s["desc"]}</p>
+                </div>
+            </div>
+        ''', unsafe_allow_html=True)
 
 elif pagina == "🚀 Proyectos":
     st.image("https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80", use_container_width=True)
