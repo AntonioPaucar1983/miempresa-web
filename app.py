@@ -5,7 +5,7 @@ import plotly.express as px
 
 # Configuración de la página
 st.set_page_config(
-    page_title="miEmpresaACME - Consultoría Gerencial",
+    page_title="Consultores Enterprise. S. A. - Consultoría Gerencial",
     page_icon="🏢",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -116,7 +116,7 @@ st.markdown("""
 with st.sidebar:
     st.markdown("""
         <div style="text-align: center; padding: 20px 0;">
-            <h2 style="color: #0099ff;">🏢 miEmpresaACME</h2>
+            <h2 style="color: #0099ff;">🏢 Consultores Enterprise. S. A.</h2>
             <p style="color: #666; font-size: 0.9em;">Consultoría Gerencial y Administración de Proyectos</p>
         </div>
     """, unsafe_allow_html=True)
@@ -131,52 +131,83 @@ with st.sidebar:
 
 # ==================== PÁGINA: INICIO ====================
 if pagina == "🏠 Inicio":
-    import time
-    
-    # Carrusel automático de imágenes
+    # Carrusel automático de imágenes con CSS
     st.markdown("""
         <div class="header-section" style="text-align: center; margin-bottom: 20px;">
-            <h2>Bienvenido a miEmpresaACME</h2>
+            <h2>Bienvenido a Consultores Enterprise. S. A.</h2>
             <p style="font-size: 1.1em;">Consultoría Gerencial y Administración de Proyectos</p>
         </div>
-    """, unsafe_allow_html=True)
-    
-    # Inicializar estado del carrusel
-    if 'imagen_index' not in st.session_state:
-        st.session_state.imagen_index = 0
-    if 'ultimo_tiempo' not in st.session_state:
-        st.session_state.ultimo_tiempo = time.time()
-    
-    fotos = [
-        "fotos/fotoInicio.jpg",
-        "fotos/fotoInicio1.jpg",
-        "fotos/fotoInicio2.jpg",
-        "fotos/fotoInicio3.jpg",
-        "fotos/fotoInicio4.jpg"
-    ]
-    
-    # Mostrar imagen actual
-    st.image(fotos[st.session_state.imagen_index], use_container_width=True)
-    
-    # Contador visual
-    st.markdown(f"""
-        <div style="text-align: center; padding: 15px; background-color: #0099ff; color: white; border-radius: 8px; margin-top: 10px;">
-            <strong>Galería: {st.session_state.imagen_index + 1} / {len(fotos)}</strong>
+        
+        <style>
+            .carousel {
+                position: relative;
+                width: 100%;
+                max-width: 100%;
+                margin: 0 auto;
+                overflow: hidden;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0, 153, 255, 0.3);
+            }
+            
+            .carousel-inner {
+                display: flex;
+                animation: slide 20s infinite;
+            }
+            
+            .carousel-item {
+                min-width: 100%;
+                flex: 0 0 100%;
+            }
+            
+            .carousel-item img {
+                width: 100%;
+                height: auto;
+                display: block;
+            }
+            
+            @keyframes slide {
+                0% { transform: translateX(0); }
+                20% { transform: translateX(0); }
+                25% { transform: translateX(-100%); }
+                45% { transform: translateX(-100%); }
+                50% { transform: translateX(-200%); }
+                70% { transform: translateX(-200%); }
+                75% { transform: translateX(-300%); }
+                95% { transform: translateX(-300%); }
+                100% { transform: translateX(-400%); }
+            }
+            
+            .carousel-counter {
+                position: absolute;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: rgba(0, 153, 255, 0.9);
+                color: white;
+                padding: 10px 20px;
+                border-radius: 20px;
+                font-weight: bold;
+                z-index: 10;
+            }
+        </style>
+        
+        <div class="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item"><img src="fotos/fotoInicio.jpg" alt="Foto 1"></div>
+                <div class="carousel-item"><img src="fotos/fotoInicio1.jpg" alt="Foto 2"></div>
+                <div class="carousel-item"><img src="fotos/fotoInicio2.jpg" alt="Foto 3"></div>
+                <div class="carousel-item"><img src="fotos/fotoInicio3.jpg" alt="Foto 4"></div>
+                <div class="carousel-item"><img src="fotos/fotoInicio4.jpg" alt="Foto 5"></div>
+            </div>
+            <div class="carousel-counter">Galería automática - 5 fotos</div>
         </div>
     """, unsafe_allow_html=True)
-    
-    # Auto-avanzar cada 4 segundos
-    tiempo_actual = time.time()
-    if tiempo_actual - st.session_state.ultimo_tiempo > 4:
-        st.session_state.imagen_index = (st.session_state.imagen_index + 1) % len(fotos)
-        st.session_state.ultimo_tiempo = tiempo_actual
-        st.rerun()
     
     st.divider()
     
     st.markdown("""
         <div class="header-section">
-            <h1>miEmpresaACME Cía. Ltda.</h1>
+            <h1>Consultores Enterprise. S. A. Cía. Ltda.</h1>
             <p style="font-size: 1.2em; margin-top: 10px;">Consultoría Gerencial y Administración de Proyectos</p>
             <p style="font-size: 1em; opacity: 0.95;">Transformando negocios ecuatorianos con soluciones estratégicas</p>
         </div>
@@ -302,7 +333,7 @@ if pagina == "🏠 Inicio":
     with col1:
         st.subheader("💡 Nuestra Propuesta")
         st.write("""
-        En miEmpresaACME creemos que cada empresa es única. Ofrecemos soluciones 
+        En Consultores Enterprise. S. A. creemos que cada empresa es única. Ofrecemos soluciones 
         personalizadas de consultoría gerencial que se adaptan a tus necesidades específicas.
         
         Nuestro enfoque combina experiencia, innovación y conocimiento del mercado ecuatoriano 
@@ -344,7 +375,7 @@ elif pagina == "ℹ️ Nosotros":
     with tab1:
         st.subheader("📖 Nuestra Historia")
         st.write("""
-        miEmpresaACME fue fundada en 2012 por un grupo de profesionales con más de 15 años 
+        Consultores Enterprise. S. A. fue fundada en 2012 por un grupo de profesionales con más de 15 años 
         de experiencia en consultoría gerencial en Latinoamérica. 
         
         Inicialmente comenzamos como una pequeña consultora en Quito, enfocados en empresas 
@@ -415,7 +446,7 @@ elif pagina == "💼 Servicios":
     """, unsafe_allow_html=True)
     
     st.write("""
-    En miEmpresaACME ofrecemos un portafolio completo de servicios de consultoría 
+    En Consultores Enterprise. S. A. ofrecemos un portafolio completo de servicios de consultoría 
     diseñados para satisfacer las necesidades más complejas de tu empresa.
     """)
     
@@ -482,7 +513,7 @@ elif pagina == "📰 Noticias":
             "titulo": "5 Tendencias de Administración de Proyectos en 2024",
             "fecha": "15 de septiembre, 2024",
             "contenido": "La administración de proyectos evoluciona constantemente. En este artículo exploramos las tendencias más importantes que están transformando la forma en que gestionamos proyectos en Ecuador.",
-            "autor": "Equipo miEmpresaACME"
+            "autor": "Equipo Consultores Enterprise. S. A."
         },
         {
             "titulo": "Transformación Digital: Más que una moda",
@@ -500,7 +531,7 @@ elif pagina == "📰 Noticias":
             "titulo": "Liderazgo Efectivo en Tiempos de Incertidumbre",
             "fecha": "25 de agosto, 2024",
             "contenido": "¿Cómo los líderes pueden mantener equipos motivados en épocas de cambio? Compartimos estrategias probadas que funcionan en el contexto ecuatoriano.",
-            "autor": "Equipo miEmpresaACME"
+            "autor": "Equipo Consultores Enterprise. S. A."
         }
     ]
     
@@ -530,7 +561,7 @@ elif pagina == "📧 Contacto":
         st.subheader("📍 Información de Contacto")
         
         st.write("""
-        **miEmpresaACME Cía. Ltda.**
+        **Consultores Enterprise. S. A. Cía. Ltda.**
         
         📍 **Oficina Principal**
         Av. Amazonas N34-451 y Av. Naciones Unidas
@@ -620,7 +651,7 @@ elif pagina == "📧 Contacto":
 st.divider()
 st.markdown("""
     <div style="text-align: center; padding: 20px; color: #666; font-size: 0.9em;">
-        <p>© 2024 miEmpresaACME Cía. Ltda. | Consultoría Gerencial y Administración de Proyectos</p>
+        <p>© 2024 Consultores Enterprise. S. A. Cía. Ltda. | Consultoría Gerencial y Administración de Proyectos</p>
         <p>Quito - Guayaquil - Cuenca | Ecuador</p>
         <p style="font-size: 0.8em; margin-top: 10px;">Diseño y desarrollo web realizado con Streamlit</p>
     </div>
