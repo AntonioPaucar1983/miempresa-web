@@ -21,9 +21,6 @@ if 'visitas' not in st.session_state:
 if 'usuarios_online' not in st.session_state:
     st.session_state.usuarios_online = random.randint(10, 25)
 
-if 'mostrar_juego' not in st.session_state:
-    st.session_state.mostrar_juego = False
-
 # Incrementar visitas
 st.session_state.visitas += 1
 # Variar usuarios en línea
@@ -490,13 +487,6 @@ with st.sidebar:
         try:
             with open("fotos/logoEmpresa.jpg", "rb") as logo_file:
                 logo_data = base64.b64encode(logo_file.read()).decode()
-                
-                # Botón invisible pero funcional
-                if st.button("", key="logo_game_btn", use_container_width=True, help="Haz click para jugar"):
-                    st.session_state.mostrar_juego = True
-                    st.rerun()
-                
-                # Mostrar el logo (HTML puro sin onclick)
                 st.markdown(f"""
                     <div style="
                         background: {theme['bg_secondary']};
@@ -520,7 +510,7 @@ with st.sidebar:
                             font-size: 0.85em;
                             margin: 8px 0 0 0;
                             font-weight: 500;
-                        ">🎮 Haz click aquí</p>
+                        ">Consultores Enterprise</p>
                     </div>
                 """, unsafe_allow_html=True)
         except Exception as e:
@@ -986,164 +976,5 @@ elif pagina == "📧 Contacto":
         """, unsafe_allow_html=True)
 
 st.divider()
-
-# Mostrar juego si se activó
-if st.session_state.mostrar_juego:
-    st.markdown(f"""
-        <style>
-            .gameContainer {{
-                background: {theme['bg_secondary']};
-                border: 3px solid {theme['accent_1']};
-                border-radius: 20px;
-                padding: 40px;
-                text-align: center;
-                animation: fadeInScale 0.5s ease-out;
-                max-width: 500px;
-                margin: 30px auto;
-                box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
-            }}
-            
-            .gameTitle {{
-                color: {theme['text_primary']};
-                font-size: 2em;
-                font-weight: 900;
-                margin: 0 0 15px 0;
-            }}
-            
-            .gameSubtitle {{
-                color: {theme['text_secondary']};
-                font-size: 1em;
-                margin-bottom: 30px;
-            }}
-            
-            .gameBoard {{
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 12px;
-                margin-bottom: 30px;
-            }}
-            
-            .gameCell {{
-                width: 100px;
-                height: 100px;
-                background: {theme['bg_primary']};
-                border: 3px solid {theme['accent_1']};
-                border-radius: 12px;
-                font-size: 40px;
-                font-weight: 900;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.2s ease;
-                color: {theme['text_primary']};
-            }}
-            
-            .gameCell:hover {{
-                background: {theme['accent_1']};
-                transform: scale(1.05);
-            }}
-            
-            .gameStatus {{
-                color: {theme['accent_2']};
-                font-size: 1.2em;
-                font-weight: 700;
-                margin-bottom: 25px;
-                min-height: 30px;
-            }}
-        </style>
-        
-        <div class="gameContainer">
-            <h2 class="gameTitle">🎮 Tres en Raya</h2>
-            <p class="gameSubtitle">¡Desafíate a ti mismo! Tú eres X, yo soy O</p>
-            <div id="gameStatus" class="gameStatus">Presiona una casilla para comenzar</div>
-            <div class="gameBoard" id="gameBoard">
-                <div class="gameCell" onclick="playerMove(0)" style="cursor: pointer;"></div>
-                <div class="gameCell" onclick="playerMove(1)" style="cursor: pointer;"></div>
-                <div class="gameCell" onclick="playerMove(2)" style="cursor: pointer;"></div>
-                <div class="gameCell" onclick="playerMove(3)" style="cursor: pointer;"></div>
-                <div class="gameCell" onclick="playerMove(4)" style="cursor: pointer;"></div>
-                <div class="gameCell" onclick="playerMove(5)" style="cursor: pointer;"></div>
-                <div class="gameCell" onclick="playerMove(6)" style="cursor: pointer;"></div>
-                <div class="gameCell" onclick="playerMove(7)" style="cursor: pointer;"></div>
-                <div class="gameCell" onclick="playerMove(8)" style="cursor: pointer;"></div>
-            </div>
-        </div>
-        
-        <script>
-            let board = ['', '', '', '', '', '', '', '', ''];
-            let playerX = 'X';
-            let playerO = 'O';
-            let gameActive = true;
-            
-            const winningConditions = [
-                [0, 1, 2], [3, 4, 5], [6, 7, 8],
-                [0, 3, 6], [1, 4, 7], [2, 5, 8],
-                [0, 4, 8], [2, 4, 6]
-            ];
-            
-            function playerMove(index) {{
-                if (board[index] !== '' || !gameActive) return;
-                board[index] = playerX;
-                updateBoard();
-                
-                if (checkWinner(playerX)) {{
-                    document.getElementById('gameStatus').textContent = '🎉 ¡Ganaste! ¡Eres increíble!';
-                    gameActive = false;
-                    return;
-                }}
-                
-                if (board.every(cell => cell !== '')) {{
-                    document.getElementById('gameStatus').textContent = '🤝 ¡Empate!';
-                    gameActive = false;
-                    return;
-                }}
-                
-                setTimeout(computerMove, 500);
-            }}
-            
-            function computerMove() {{
-                let empty = board.reduce((acc, cell, i) => cell === '' ? [...acc, i] : acc, []);
-                if (empty.length === 0) return;
-                
-                let idx = empty[Math.floor(Math.random() * empty.length)];
-                board[idx] = playerO;
-                updateBoard();
-                
-                if (checkWinner(playerO)) {{
-                    document.getElementById('gameStatus').textContent = '🤖 ¡Gané! Vuelve a intentarlo';
-                    gameActive = false;
-                    return;
-                }}
-                
-                if (board.every(cell => cell !== '')) {{
-                    document.getElementById('gameStatus').textContent = '🤝 ¡Empate!';
-                    gameActive = false;
-                    return;
-                }}
-            }}
-            
-            function checkWinner(player) {{
-                return winningConditions.some(c => c.every(i => board[i] === player));
-            }}
-            
-            function updateBoard() {{
-                document.querySelectorAll('.gameCell').forEach((cell, i) => {{
-                    cell.textContent = board[i];
-                    cell.style.color = board[i] === 'X' ? '#6366f1' : '#06b6d4';
-                }});
-            }}
-        </script>
-    """, unsafe_allow_html=True)
-    
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        if st.button("🔄 Nuevo Juego", use_container_width=True):
-            st.session_state.mostrar_juego = True
-            st.rerun()
-    
-    with col3:
-        if st.button("✖️ Cerrar", use_container_width=True):
-            st.session_state.mostrar_juego = False
-            st.rerun()
 
 st.markdown(f'<div style="text-align:center;color:{theme["text_secondary"]};padding:20px;font-size:0.9em;">© 2024 Consultores Enterprise • Dark Mode ✓ • Versión 2.0 Moderna</div>', unsafe_allow_html=True)
