@@ -615,18 +615,23 @@ elif pagina == "🚀 Proyectos":
     st.divider()
     
     proyectos = [
-        {"titulo": "Manufactura: Aumento 45% de Productividad", "fecha": "Ago 2024", "desc": "Empresa manufacturera en Cuenca logró aumentar productividad significativamente"},
-        {"titulo": "Servicios: Optimización de Procesos", "fecha": "Jul 2024", "desc": "Reducción de tiempos operacionales en 35% mediante reingeniería"},
-        {"titulo": "Educación: Transformación Digital", "fecha": "Jun 2024", "desc": "Centro educativo implementó sistema integral de gestión digital"},
-        {"titulo": "Comercio: Estrategia de Expansión", "fecha": "May 2024", "desc": "Empresa comercial expandió operaciones a 3 nuevas ciudades"}
+        {"titulo": "Manufactura: Aumento 45% de Productividad", "fecha": "Ago 2024", "desc": "Empresa manufacturera en Cuenca logró aumentar productividad significativamente", "foto": "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=300&q=80"},
+        {"titulo": "Servicios: Optimización de Procesos", "fecha": "Jul 2024", "desc": "Reducción de tiempos operacionales en 35% mediante reingeniería", "foto": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&q=80"},
+        {"titulo": "Educación: Transformación Digital", "fecha": "Jun 2024", "desc": "Centro educativo implementó sistema integral de gestión digital", "foto": "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=300&q=80"},
+        {"titulo": "Comercio: Estrategia de Expansión", "fecha": "May 2024", "desc": "Empresa comercial expandió operaciones a 3 nuevas ciudades", "foto": "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=300&q=80"}
     ]
     
     for p in proyectos:
         st.markdown(f"""
-            <div class="project-modern">
-                <h3>{p['titulo']}</h3>
-                <div class="project-meta">📅 {p['fecha']}</div>
-                <p style="color:{theme['text_secondary']}; margin-bottom:0;">{p['desc']}</p>
+            <div class="project-modern" style="display: flex; gap: 20px;">
+                <div style="flex: 0 0 120px;">
+                    <img src="{p["foto"]}" style="width: 120px; height: 100px; object-fit: cover; border-radius: 12px;">
+                </div>
+                <div style="flex: 1;">
+                    <h3 style="margin-top: 0;">{p['titulo']}</h3>
+                    <div class="project-meta">📅 {p['fecha']}</div>
+                    <p style="color:{theme['text_secondary']}; margin-bottom:0;">{p['desc']}</p>
+                </div>
             </div>
         """, unsafe_allow_html=True)
 
