@@ -479,7 +479,7 @@ st.markdown(f"""
 with st.sidebar:
     col1, col2 = st.columns([3, 1])
     with col2:
-        if st.button("🌙" if not st.session_state.dark_mode else "☀️"):
+        if st.button("🌙" if not st.session_state.dark_mode else "☀️", key="theme_btn"):
             st.session_state.dark_mode = not st.session_state.dark_mode
             st.rerun()
     
@@ -487,16 +487,42 @@ with st.sidebar:
         try:
             with open("fotos/logoEmpresa.jpg", "rb") as logo_file:
                 logo_data = base64.b64encode(logo_file.read()).decode()
+                
+                if st.button("", key="logo_btn", use_container_width=True):
+                    st.success("✨ **¡Gracias por visitarnos!**\n\nEstamos aquí para transformar tus proyectos en realidad. Con nuestra experiencia en consultoría gerencial y gestión de proyectos, te ayudamos a alcanzar tus metas empresariales.\n\n🎯 **Estamos listos para impulsar tu éxito**")
+                
                 st.markdown(f"""
-                    <div style="text-align: center; padding: 20px 0;">
-                        <img src="data:image/jpeg;base64,{logo_data}" style="width: 180px; height: auto; object-fit: contain; filter: {'brightness(1.3)' if st.session_state.dark_mode else 'brightness(1)'}; margin-bottom: 10px;">
+                    <div style="
+                        background: {theme['bg_secondary']};
+                        border: 2px solid {theme['accent_1']};
+                        border-radius: 16px;
+                        padding: 20px;
+                        text-align: center;
+                        animation: slideInDown 0.8s ease-out;
+                        transition: all 0.3s ease;
+                        cursor: pointer;
+                    " onclick="document.querySelector('[data-testid=stButton][key=logo_btn]').click()">
+                        <img src="data:image/jpeg;base64,{logo_data}" style="
+                            width: 160px;
+                            height: auto;
+                            object-fit: contain;
+                            filter: {'brightness(1.3)' if st.session_state.dark_mode else 'brightness(1)'};
+                            margin-bottom: 12px;
+                            animation: float 3s ease-in-out infinite;
+                        ">
+                        <p style="
+                            color: {theme['text_secondary']};
+                            font-size: 0.85em;
+                            margin: 8px 0 0 0;
+                            font-weight: 500;
+                        ">Haz click aquí</p>
                     </div>
                 """, unsafe_allow_html=True)
-        except:
+        except Exception as e:
             st.markdown(f"""
-                <div style="text-align: center; padding: 20px 0;">
+                <div style="background: {theme['bg_secondary']}; border: 2px solid {theme['accent_1']}; border-radius: 16px; padding: 20px; text-align: center; animation: slideInDown 0.8s ease-out;">
                     <h2 style="color: {theme['accent_1']}; margin: 0; font-size: 1.6em;">CE</h2>
-                    <p style="color: {theme['text_secondary']}; font-size: 0.8em; margin: 0;">Moderna</p>
+                    <p style="color: {theme['text_secondary']}; font-size: 0.8em; margin: 8px 0 0 0;">Moderna</p>
                 </div>
             """, unsafe_allow_html=True)
     
