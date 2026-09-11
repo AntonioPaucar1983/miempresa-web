@@ -36,13 +36,13 @@ DARK_MODE = {
     "bg_secondary": "#1a1f2e",
     "text_primary": "#f1f5f9",
     "text_secondary": "#cbd5e1",
-    "accent_1": "#818cf8",
-    "accent_2": "#22d3ee",
-    "accent_3": "#a78bfa",
+    "accent_1": "#a78bfa",
+    "accent_2": "#38bdf8",
+    "accent_3": "#c084fc",
     "accent_4": "#f472b6",
-    "gradient_1": "linear-gradient(135deg, #818cf8 0%, #22d3ee 100%)",
-    "gradient_2": "linear-gradient(135deg, #a78bfa 0%, #f472b6 100%)",
-    "gradient_3": "linear-gradient(135deg, #22d3ee 0%, #60a5fa 100%)"
+    "gradient_1": "linear-gradient(135deg, #a78bfa 0%, #38bdf8 100%)",
+    "gradient_2": "linear-gradient(135deg, #c084fc 0%, #f472b6 100%)",
+    "gradient_3": "linear-gradient(135deg, #38bdf8 0%, #60a5fa 100%)"
 }
 
 theme = DARK_MODE if st.session_state.dark_mode else LIGHT_MODE
@@ -154,10 +154,7 @@ st.markdown(f"""
         .metric-value {{
             font-size: 56px;
             font-weight: 900;
-            background: {theme['gradient_1']};
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: {theme['accent_1']};
             margin: 20px 0;
             position: relative;
             z-index: 1;
@@ -233,10 +230,7 @@ st.markdown(f"""
             font-weight: 900;
             text-align: center;
             margin: 60px 0 20px 0;
-            background: {theme['gradient_1']};
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: {theme['accent_1']};
             letter-spacing: -1px;
         }}
         
