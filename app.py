@@ -637,24 +637,160 @@ elif pagina == "🚀 Proyectos":
 
 elif pagina == "📧 Contacto":
     st.image("https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80", use_container_width=True)
-    st.markdown(f'<div class="header-modern"><h1>Contáctanos</h1></div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="header-modern"><h1>Contáctanos</h1><p>Estamos listos para ayudarte</p></div>', unsafe_allow_html=True)
     
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="large")
+    
     with col1:
         st.markdown(f"""
-            <h3 style="color:{theme['text_primary']}; margin-top:0;">📍 Ubicaciones</h3>
-            <p style="color:{theme['text_secondary']}; font-size:0.95em;"><strong>Quito</strong><br>Av. Amazonas • +593 2 XXXX-XXXX</p>
-            <p style="color:{theme['text_secondary']}; font-size:0.95em;"><strong>Guayaquil</strong><br>Parque Empresarial • +593 4 XXXX-XXXX</p>
-            <p style="color:{theme['text_secondary']}; font-size:0.95em;"><strong>Cuenca</strong><br>Av. Gran Colombia • +593 7 XXXX-XXXX</p>
+            <h3 style="color:{theme['text_primary']}; margin-top:0; font-size: 1.4em;">📍 Ubicaciones</h3>
+        """, unsafe_allow_html=True)
+        
+        st.markdown(f"""
+            <div style="background: {theme['bg_secondary']}; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+                <p style="color:{theme['text_primary']}; font-weight: 700; margin: 0 0 10px 0;"><strong>Quito</strong></p>
+                <p style="color:{theme['text_secondary']}; font-size:0.95em; margin: 0;">Av. Amazonas N34-451</p>
+                <p style="color:{theme['text_secondary']}; font-size:0.95em; margin: 5px 0 0 0;">📞 +593 2 XXXX-XXXX</p>
+            </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown(f"""
+            <div style="background: {theme['bg_secondary']}; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+                <p style="color:{theme['text_primary']}; font-weight: 700; margin: 0 0 10px 0;"><strong>Guayaquil</strong></p>
+                <p style="color:{theme['text_secondary']}; font-size:0.95em; margin: 0;">Parque Empresarial</p>
+                <p style="color:{theme['text_secondary']}; font-size:0.95em; margin: 5px 0 0 0;">📞 +593 4 XXXX-XXXX</p>
+            </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown(f"""
+            <div style="background: {theme['bg_secondary']}; padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+                <p style="color:{theme['text_primary']}; font-weight: 700; margin: 0 0 10px 0;"><strong>Cuenca</strong></p>
+                <p style="color:{theme['text_secondary']}; font-size:0.95em; margin: 0;">Av. Gran Colombia</p>
+                <p style="color:{theme['text_secondary']}; font-size:0.95em; margin: 5px 0 0 0;">📞 +593 7 XXXX-XXXX</p>
+            </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown(f"""
+            <h3 style="color:{theme['text_primary']}; margin-top:25px; margin-bottom:15px; font-size: 1.2em;">📱 Redes Sociales</h3>
+        """, unsafe_allow_html=True)
+        
+        col_social1, col_social2, col_social3, col_social4 = st.columns(4)
+        
+        with col_social1:
+            st.markdown(f"""
+                <a href="https://facebook.com" target="_blank" style="
+                    display: inline-block;
+                    background: linear-gradient(135deg, {theme['accent_1']} 0%, {theme['accent_2']} 100%);
+                    color: white;
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    text-align: center;
+                    line-height: 50px;
+                    text-decoration: none;
+                    font-weight: bold;
+                    font-size: 24px;
+                ">📘</a>
+            """, unsafe_allow_html=True)
+        
+        with col_social2:
+            st.markdown(f"""
+                <a href="https://instagram.com" target="_blank" style="
+                    display: inline-block;
+                    background: linear-gradient(135deg, {theme['accent_3']} 0%, {theme['accent_4']} 100%);
+                    color: white;
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    text-align: center;
+                    line-height: 50px;
+                    text-decoration: none;
+                    font-weight: bold;
+                    font-size: 24px;
+                ">📷</a>
+            """, unsafe_allow_html=True)
+        
+        with col_social3:
+            st.markdown(f"""
+                <a href="https://linkedin.com" target="_blank" style="
+                    display: inline-block;
+                    background: linear-gradient(135deg, {theme['accent_2']} 0%, {theme['accent_1']} 100%);
+                    color: white;
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    text-align: center;
+                    line-height: 50px;
+                    text-decoration: none;
+                    font-weight: bold;
+                    font-size: 24px;
+                ">🔗</a>
+            """, unsafe_allow_html=True)
+        
+        with col_social4:
+            st.markdown(f"""
+                <a href="https://twitter.com" target="_blank" style="
+                    display: inline-block;
+                    background: linear-gradient(135deg, {theme['accent_1']} 0%, {theme['accent_3']} 100%);
+                    color: white;
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    text-align: center;
+                    line-height: 50px;
+                    text-decoration: none;
+                    font-weight: bold;
+                    font-size: 20px;
+                ">𝕏</a>
+            """, unsafe_allow_html=True)
+        
+        st.markdown(f"""
+            <div style="background: linear-gradient(135deg, {theme['accent_2']} 0%, {theme['accent_1']} 100%); padding: 25px; border-radius: 12px; margin-top: 25px; text-align: center;">
+                <p style="color: white; font-size: 1.05em; margin-bottom: 12px;"><strong>💬 Contáctanos por WhatsApp</strong></p>
+                <a href="https://wa.me/593XXXXXXXXXX?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20sus%20servicios" target="_blank" style="
+                    display: inline-block;
+                    background: white;
+                    color: {theme['accent_2']};
+                    padding: 12px 30px;
+                    border-radius: 50px;
+                    text-decoration: none;
+                    font-weight: 700;
+                ">📱 Iniciar Chat</a>
+            </div>
         """, unsafe_allow_html=True)
     
     with col2:
-        st.markdown(f"<h3 style='color:{theme['text_primary']}; margin-top:0;'>📧 Formulario</h3>", unsafe_allow_html=True)
-        with st.form("contacto"):
-            st.text_input("Nombre", label_visibility="collapsed", placeholder="Tu nombre")
-            st.text_input("Email", label_visibility="collapsed", placeholder="Tu email")
-            st.text_area("Mensaje", height=120, label_visibility="collapsed", placeholder="Tu mensaje")
-            st.form_submit_button("Enviar Mensaje", use_container_width=True)
+        st.markdown(f"""
+            <h3 style="color:{theme['text_primary']}; margin-top:0; font-size: 1.4em;">📧 Formulario de Contacto</h3>
+        """, unsafe_allow_html=True)
+        
+        with st.form("contacto_form"):
+            nombre = st.text_input("👤 Nombre Completo", placeholder="Tu nombre", label_visibility="collapsed")
+            email = st.text_input("📧 Email", placeholder="tu@email.com", label_visibility="collapsed")
+            telefono = st.text_input("📞 Teléfono", placeholder="+593 9 XXXX-XXXX", label_visibility="collapsed")
+            empresa = st.text_input("🏢 Empresa", placeholder="Nombre de tu empresa", label_visibility="collapsed")
+            asunto = st.selectbox("🎯 Asunto", ["Selecciona un asunto", "Consulta de Servicios", "Diagnóstico Empresarial", "Administración de Proyectos", "Planificación Estratégica", "Otro"], label_visibility="collapsed")
+            mensaje = st.text_area("💭 Mensaje", placeholder="Cuéntanos cómo podemos ayudarte...", height=100, label_visibility="collapsed")
+            
+            col_submit1, col_submit2 = st.columns(2)
+            with col_submit1:
+                enviado = st.form_submit_button("✉️ Enviar Mensaje", use_container_width=True)
+            with col_submit2:
+                st.form_submit_button("🔄 Limpiar", use_container_width=True)
+            
+            if enviado and nombre and email and telefono and mensaje:
+                st.success("✅ ¡Mensaje enviado exitosamente! Nos pondremos en contacto pronto.")
+            elif enviado and not (nombre and email and telefono and mensaje):
+                st.error("⚠️ Por favor completa todos los campos requeridos.")
+        
+        st.markdown(f"""
+            <div style="background: {theme['bg_secondary']}; padding: 20px; border-radius: 12px; margin-top: 20px; border-left: 4px solid {theme['accent_2']};">
+                <p style="color:{theme['text_primary']}; font-weight: 700; margin-top: 0;"><strong>⏰ Horarios de Atención</strong></p>
+                <p style="color:{theme['text_secondary']}; font-size: 0.95em; margin: 8px 0;"><strong>Lunes - Viernes:</strong> 8:00 AM - 6:00 PM</p>
+                <p style="color:{theme['text_secondary']}; font-size: 0.95em; margin: 8px 0;"><strong>Sábado:</strong> 9:00 AM - 1:00 PM</p>
+                <p style="color:{theme['text_secondary']}; font-size: 0.95em; margin: 8px 0 0 0;"><strong>Domingo:</strong> Cerrado</p>
+            </div>
+        """, unsafe_allow_html=True)
 
 st.divider()
 st.markdown(f'<div style="text-align:center;color:{theme["text_secondary"]};padding:20px;font-size:0.9em;">© 2024 Consultores Enterprise • Dark Mode ✓</div>', unsafe_allow_html=True)
