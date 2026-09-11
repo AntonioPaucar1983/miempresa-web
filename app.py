@@ -131,8 +131,49 @@ with st.sidebar:
 
 # ==================== PÁGINA: INICIO ====================
 if pagina == "🏠 Inicio":
-    # Banner con imagen responsive
-    st.image("fotos/fotoInicio.jpg", use_container_width=True)
+    # Carrusel de imágenes
+    st.markdown("""
+        <div class="header-section" style="text-align: center; margin-bottom: 20px;">
+            <h2>Bienvenido a miEmpresaACME</h2>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    # Carrusel de imágenes
+    if 'imagen_index' not in st.session_state:
+        st.session_state.imagen_index = 0
+    
+    fotos = [
+        "fotos/fotoInicio.jpg",
+        "fotos/fotoInicio1.jpg",
+        "fotos/fotoInicio2.jpg",
+        "fotos/fotoInicio3.jpg",
+        "fotos/fotoInicio4.jpg"
+    ]
+    
+    # Mostrar imagen actual
+    st.image(fotos[st.session_state.imagen_index], use_container_width=True)
+    
+    # Controles del carrusel
+    col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1, 1])
+    
+    with col1:
+        if st.button("⬅️ Anterior"):
+            st.session_state.imagen_index = (st.session_state.imagen_index - 1) % len(fotos)
+            st.rerun()
+    
+    with col3:
+        st.markdown(f"""
+            <div style="text-align: center; padding: 10px; background-color: #0099ff; color: white; border-radius: 5px;">
+                <strong>{st.session_state.imagen_index + 1} / {len(fotos)}</strong>
+            </div>
+        """, unsafe_allow_html=True)
+    
+    with col5:
+        if st.button("Siguiente ➡️"):
+            st.session_state.imagen_index = (st.session_state.imagen_index + 1) % len(fotos)
+            st.rerun()
+    
+    st.divider()
     
     st.markdown("""
         <div class="header-section">
