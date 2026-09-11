@@ -506,19 +506,22 @@ elif pagina == "ℹ️ Nosotros":
     
     equipo = [
         {
-            "archivo": "fotos/gerente.JPEG",
+            "archivo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80",
             "titulo": "Liderazgo Ejecutivo",
-            "desc": "Nuestros gerentes aportan visión estratégica y experiencia comprobada. Con más de 15 años en consultoría, dirigen cada proyecto con excelencia y compromiso hacia resultados transformadores para tu empresa."
+            "desc": "Nuestros gerentes aportan visión estratégica y experiencia comprobada. Con más de 15 años en consultoría, dirigen cada proyecto con excelencia y compromiso hacia resultados transformadores para tu empresa.",
+            "tipo": "url"
         },
         {
-            "archivo": "fotos/ingenieros.JPEG",
+            "archivo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&q=80",
             "titulo": "Ingeniería de Soluciones",
-            "desc": "Ingenieros especializados que diseñan y ejecutan soluciones complejas. Combinan metodologías avanzadas con innovación tecnológica para resolver los desafíos más exigentes de tu negocio."
+            "desc": "Ingenieros especializados que diseñan y ejecutan soluciones complejas. Combinan metodologías avanzadas con innovación tecnológica para resolver los desafíos más exigentes de tu negocio.",
+            "tipo": "url"
         },
         {
             "archivo": "fotos/consultoras.jpg",
             "titulo": "Consultoría Especializada",
-            "desc": "Consultores con expertise en diversos sectores económicos. Aportan perspectivas frescas y estrategias probadas que aceleran la transformación y crecimiento de tu organización."
+            "desc": "Consultores con expertise en diversos sectores económicos. Aportan perspectivas frescas y estrategias probadas que aceleran la transformación y crecimiento de tu organización.",
+            "tipo": "local"
         }
     ]
     
@@ -527,8 +530,8 @@ elif pagina == "ℹ️ Nosotros":
     for idx, (col, person) in enumerate(zip(cols, equipo)):
         with col:
             try:
-                with open(person["archivo"], "rb") as f:
-                    img_data = base64.b64encode(f.read()).decode()
+                # Si es URL de internet
+                if person["tipo"] == "url":
                     st.markdown(f"""
                         <div style="
                             background: {theme['bg_secondary']};
@@ -537,13 +540,32 @@ elif pagina == "ℹ️ Nosotros":
                             border: 2px solid {theme['accent_1']};
                             transition: all 0.3s ease;
                         ">
-                            <img src="data:image/jpeg;base64,{img_data}" style="width:100%; height:300px; object-fit:cover;">
+                            <img src="{person['archivo']}" style="width:100%; height:300px; object-fit:cover;">
                             <div style="padding: 25px;">
                                 <h3 style="color: {theme['accent_1']}; margin-top: 0; font-size: 1.2em;">{person['titulo']}</h3>
                                 <p style="color: {theme['text_secondary']}; line-height: 1.6; margin: 0; font-size: 0.95em;">{person['desc']}</p>
                             </div>
                         </div>
                     """, unsafe_allow_html=True)
+                # Si es archivo local
+                else:
+                    with open(person["archivo"], "rb") as f:
+                        img_data = base64.b64encode(f.read()).decode()
+                        st.markdown(f"""
+                            <div style="
+                                background: {theme['bg_secondary']};
+                                border-radius: 16px;
+                                overflow: hidden;
+                                border: 2px solid {theme['accent_1']};
+                                transition: all 0.3s ease;
+                            ">
+                                <img src="data:image/jpeg;base64,{img_data}" style="width:100%; height:300px; object-fit:cover;">
+                                <div style="padding: 25px;">
+                                    <h3 style="color: {theme['accent_1']}; margin-top: 0; font-size: 1.2em;">{person['titulo']}</h3>
+                                    <p style="color: {theme['text_secondary']}; line-height: 1.6; margin: 0; font-size: 0.95em;">{person['desc']}</p>
+                                </div>
+                            </div>
+                        """, unsafe_allow_html=True)
             except:
                 st.markdown(f"""
                     <div style="
